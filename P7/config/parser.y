@@ -102,7 +102,7 @@ input: /* empty */     {
                         }
       ;
 
-CompUnit    : Decl              {   line("Line:%-3d",@1.first_line);
+CompUnit: Decl              {   line("Line:%-3d",@1.first_line);
                                     debug ("CompUnit ::= Decl\n");
                                     $$ = $1;
                                     $$->scope =1;
@@ -114,7 +114,7 @@ CompUnit    : Decl              {   line("Line:%-3d",@1.first_line);
                                     $$ -> scope =1;
                                 }
             ;
-FuncDef     : void_tok var_tok '(' ')' Block    {   line("Line:%-3d",@1.first_line);
+FuncDef: void_tok var_tok '(' ')' Block    {   line("Line:%-3d",@1.first_line);
                                                     debug("FuncDef ::= void ident() Block\n");
                                                     if(error_flag == 0)
                                                     {   
@@ -163,7 +163,7 @@ FuncDef     : void_tok var_tok '(' ')' Block    {   line("Line:%-3d",@1.first_li
                                                     }
                                                 } 
             ;                                               
-Block       : '{'   '}'             {   line("Line:%-3d",@1.first_line);
+Block: '{'   '}'             {   line("Line:%-3d",@1.first_line);
                                         debug("Block ::= {  }\n");
                                         if(error_flag == 0)
                                         {   
@@ -192,7 +192,7 @@ Block       : '{'   '}'             {   line("Line:%-3d",@1.first_line);
                                         }
                                     }
             ;
-BlockItemH  : BlockItem             {   line("Line:%-3d",@1.first_line);
+BlockItemH: BlockItem             {   line("Line:%-3d",@1.first_line);
                                         debug("BlockItemH ::= BlockItem\n");
                                         if(error_flag == 0)
                                         {   
@@ -216,7 +216,7 @@ BlockItemH  : BlockItem             {   line("Line:%-3d",@1.first_line);
 
                                     }
             ;
-BlockItem   : Decl                  {   line("Line:%-3d",@1.first_line);
+BlockItem: Decl                  {   line("Line:%-3d",@1.first_line);
                                         debug("BlockItem ::= Decl\n");
                                         $$ = $1;
                                         $$->scope = 0;
@@ -226,7 +226,7 @@ BlockItem   : Decl                  {   line("Line:%-3d",@1.first_line);
                                         $$ = $1;
                                     }
             ;
-Stmt        : asgn ';'              {   line("Line:%-3d",@$.first_line);
+Stmt: asgn ';'              {   line("Line:%-3d",@$.first_line);
                                         debug("Stmt ::= asgn;\n");
                                         $$ = $1;
                                     }
@@ -407,7 +407,7 @@ Stmt        : asgn ';'              {   line("Line:%-3d",@$.first_line);
                                                 } 
                                             }
             ;
-Cond        : exp RelOp exp         {   line("Line:%-3d",@$.first_line);
+Cond: exp RelOp exp         {   line("Line:%-3d",@$.first_line);
                                         debug("Cond ::= Exp %s Exp\n",$2->c_str());
                                         if(error_flag == 0)
                                         {   
@@ -420,7 +420,7 @@ Cond        : exp RelOp exp         {   line("Line:%-3d",@$.first_line);
             ;
 
 
-Decl        : ConstDecl         {   line("Line:%-3d",@$.first_line);
+Decl: ConstDecl         {   line("Line:%-3d",@$.first_line);
                                     debug ("Decl ::= ConstDecl\n");
                                     $$ = $1;
                                 }
@@ -430,7 +430,7 @@ Decl        : ConstDecl         {   line("Line:%-3d",@$.first_line);
                                 }
             ;
 
-ConstDecl   : const_tok int_tok ConstDefH  ';'  {       line("Line:%-3d",@$.first_line);
+ConstDecl: const_tok int_tok ConstDefH  ';'  {       line("Line:%-3d",@$.first_line);
                                                         debug("ConstDecl ::= const int ConstDefH;\n");
                                                         if(error_flag == 0)
                                                         {   
@@ -452,7 +452,7 @@ ConstDecl   : const_tok int_tok ConstDefH  ';'  {       line("Line:%-3d",@$.firs
                                                         } 
                                                 }
             ;                                                                      
-ConstDefH   : ConstDef                  {   line("Line:%-3d",@$.first_line);
+ConstDefH: ConstDef                  {   line("Line:%-3d",@$.first_line);
                                             debug("ConstDefH ::= ConstDef\n");
                                             if(error_flag == 0)
                                             {   
@@ -474,7 +474,7 @@ ConstDefH   : ConstDef                  {   line("Line:%-3d",@$.first_line);
                                             }
                                         }
             ;
-ConstDef    : var_tok '='  exp  {   line("Line:%-3d",@$.first_line);
+ConstDef: var_tok '='  exp  {   line("Line:%-3d",@$.first_line);
                                     debug("ConstDef ::= ident = Exp\n");
                                     if(error_flag == 0)
                                     {   
@@ -488,7 +488,7 @@ ConstDef    : var_tok '='  exp  {   line("Line:%-3d",@$.first_line);
                                     $$ = $1;
                                 }
             ;
-ArrayDef    : var_tok '[' ']' '=' '{' ExpH '}'  {   line("Line:%-3d",@$.first_line);
+ArrayDef: var_tok '[' ']' '=' '{' ExpH '}'  {   line("Line:%-3d",@$.first_line);
                                                     debug("ArrayDef ::= ident[]={ExpH}\n");
                                                     if(error_flag == 0)
                                                     {   
@@ -510,7 +510,7 @@ ArrayDef    : var_tok '[' ']' '=' '{' ExpH '}'  {   line("Line:%-3d",@$.first_li
                                                     }
             ;
 
-VarDecl     : int_tok  VarDefH ';'  {   line("Line:%-3d",@$.first_line);
+VarDecl: int_tok  VarDefH ';'  {   line("Line:%-3d",@$.first_line);
                                         debug("VarDecl ::= int VarDefH ;\n");
                                         if(error_flag == 0)
                                         {   
@@ -521,7 +521,7 @@ VarDecl     : int_tok  VarDefH ';'  {   line("Line:%-3d",@$.first_line);
 
                                     }
             ;
-VarDefH     : VarDef                {   line("Line:%-3d",@$.first_line);
+VarDefH: VarDef                {   line("Line:%-3d",@$.first_line);
                                         debug("VarDefH ::= VarDef\n");
                                         if(error_flag == 0)
                                         {   
@@ -544,7 +544,7 @@ VarDefH     : VarDef                {   line("Line:%-3d",@$.first_line);
                                         debug("VarDefH ::= VarDefH,VarDef\n");
                                     }
             ;
-VarDef      : LVal                  {   $$ = $1;
+VarDef: LVal                  {   $$ = $1;
                                         line("Line:%-3d",@$.first_line);
                                         debug("Var ::= ident\n");
                                         
@@ -564,7 +564,7 @@ VarDef      : LVal                  {   $$ = $1;
                                     }
             ;
 
-ExpH        : exp           {   line("Line:%-3d",@1.first_line);
+ExpH: exp           {   line("Line:%-3d",@1.first_line);
                                 debug("ExpH ::= exp\n");
                                 if(error_flag == 0)
                                 {   
@@ -587,7 +587,7 @@ ExpH        : exp           {   line("Line:%-3d",@1.first_line);
                             }
             ;
 
-asgn : LVal '=' exp     {   line("Line:%-3d",@1.first_line);
+asgn: LVal '=' exp     {   line("Line:%-3d",@1.first_line);
                             debug ("asgn ::= LVal = exp\n");
                             if(error_flag == 0)
                             {   
@@ -598,7 +598,7 @@ asgn : LVal '=' exp     {   line("Line:%-3d",@1.first_line);
                         }
      ;
 
-exp : num_tok           {   line("Line:%-3d",@1.first_line);
+exp: num_tok           {   line("Line:%-3d",@1.first_line);
                             debug ("exp ::= num\n");
                             if(error_flag == 0)
                             {   
@@ -749,12 +749,12 @@ exp : num_tok           {   line("Line:%-3d",@1.first_line);
                         }
     ;
 
-ExpL : '(' exp      {   line("Line:%-3d",@$.first_line);
+ExpL: '(' exp      {   line("Line:%-3d",@$.first_line);
                         debug("exp ::= (exp"); 
                         $$ = $2;
                     }
      ;
-LVal	: var_tok           {
+LVal: var_tok           {
                                 line("Line:%-3d",@1.first_line);
                                 debug ("LVal ::= ident\n");
                                 if(error_flag == 0)
