@@ -1,0 +1,32 @@
+A demo of LLVM IR
+
+We will use some API from LLVM-3.6.0 to generate LLVM-IR of the following C code:
+    extern int Output;
+    extern void print();
+    int main() {
+        int foo = 10;
+        while (foo > 0) {
+            Output = foo;
+            print();
+            foo = foo - 1;
+        }
+        return 0;
+    }
+
+Besides, I also provide you a C library libdemo.c:
+    int Output;
+    void print() {
+        printf("%d\n", Output);
+    }
+It will be compiled to libdemo.a (which is a static library) and linked to the
+above code with help of run.sh.
+
+To run the demo:
+> make
+> ./run.sh
+
+You can see what happened in run.sh
+
+========
+Author: Yuyang Sang (sangyy@mail.ustc.edu.cn)
+2015-12-26

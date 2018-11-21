@@ -1,0 +1,20 @@
+0. PreBuild
+   先检查makefile头部的指令是否适合本机
+   再检查./run.sh的指令是否适合本机
+
+
+1. Build
+   $ make
+  
+2. test 
+   $ ./run.sh test/test.c
+
+3. infos
+   运行程序后，目录里的asgn.dot.ll是生成的IR文件，虽然它的指令有些啰嗦，但是如果用llc工具生成.s文件的话会发现它变的非常高效，所以不应因它啰嗦而嫌弃它
+
+4. 实现的功能:
+	C1 所需的全部指令（可能个别有bug，比如遇到错误处理比较难办）
+	break,continue指令
+
+========
+Author: LiXinxing ( lxx2013@mail.ustc.edu.cn / 690154577@qq.com)

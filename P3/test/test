@@ -1,0 +1,7 @@
+for i=0,i<n+100,21 in
+	while(n<0)
+	    if(1+2<3)
+		then 
+		    error+1
+		else
+		    right+1

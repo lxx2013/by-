@@ -1,0 +1,17 @@
+digraph {
+    node [shape = record];
+    0 [label = "<0> proto|<1> body"];
+    1 [label = "<0> "];
+    2 [label = "<0> 2"];
+    3 [label = "<0> var|<1> b|<2> body"];
+    3:2 -> 2;
+    4 [label = "<0> var|<1> c|<2> body"];
+    4:2 -> 3;
+    0:0 -> 1;
+    0:1 -> 4;
+    5 [label = "<0> proto|<1> body"];
+    6 [label = "<0> "];
+    7 [label = "<0> 3"];
+    5:0 -> 6;
+    5:1 -> 7;
+}

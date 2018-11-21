@@ -1,0 +1,1421 @@
+Terminals which are not used
+
+   err_tok
+
+
+State 37 conflicts: 4 shift/reduce
+State 62 conflicts: 4 shift/reduce
+
+
+Grammar
+
+    0 $accept: input $end
+
+    1 input: /* empty */
+    2      | input CompUnit
+
+    3 CompUnit: Assume
+    4         | Segment
+
+    5 Assume: assume_tok cs_tok ':' code_tok
+    6       | assume_tok ds_tok ':' data_tok
+    7       | assume_tok ss_tok ':' stack_tok
+    8       | Assume ',' cs_tok ':' code_tok
+    9       | Assume ',' ds_tok ':' data_tok
+   10       | Assume ',' ss_tok ':' stack_tok
+
+   11 Segment: data_tok segment_tok Alloca data_tok ends_tok
+   12        | stack_tok segment_tok Alloca stack_tok ends_tok
+   13        | code_tok segment_tok Content code_tok ends_tok
+
+   14 Content: Block
+   15        | Macro
+   16        | Function
+   17        | Content Block
+   18        | Content Macro
+   19        | Content Function
+
+   20 Alloca: AllocaLine
+   21       | Alloca AllocaLine
+
+   22 AllocaLine: var_tok db_tok AllocaExpH
+   23           | var_tok dw_tok AllocaExpH
+   24           | var_tok dd_tok AllocaExpH
+
+   25 AllocaExpH: AllocaExp
+   26           | AllocaExpH ',' AllocaExp
+
+   27 AllocaExp: string_tok
+   28          | num_tok
+   29          | num_tok dup_tok '(' num_tok ')'
+
+   30 RegS: ax_tok
+   31     | bx_tok
+   32     | cx_tok
+   33     | dx_tok
+   34     | si_tok
+   35     | di_tok
+   36     | ds_tok
+   37     | ss_tok
+   38     | sp_tok
+   39     | offset_tok var_tok
+
+   40 RegE: ah_tok
+   41     | al_tok
+   42     | bh_tok
+   43     | bl_tok
+   44     | ch_tok
+   45     | cl_tok
+   46     | dh_tok
+   47     | dl_tok
+
+   48 MemAddr: var_tok
+   49        | data_tok
+   50        | stack_tok
+   51        | code_tok
+   52        | '[' ax_tok ']'
+
+   53 Instruction: Int_ins
+   54            | Mov_ins
+   55            | Cmp_ins
+   56            | Block
+
+   57 Int_ins: int_tok num_tok
+
+   58 Mov_ins: mov_tok RegE ',' RegE
+   59        | mov_tok RegS ',' RegS
+   60        | mov_tok RegE ',' num_tok
+   61        | mov_tok RegS ',' num_tok
+   62        | mov_tok RegE ',' MemAddr
+   63        | mov_tok RegS ',' MemAddr
+   64        | mov_tok MemAddr ',' MemAddr
+
+   65 Cmp_ins: cmp_tok RegE ',' RegE
+   66        | cmp_tok RegS ',' RegS
+   67        | cmp_tok RegE ',' num_tok
+   68        | cmp_tok RegS ',' num_tok
+
+   69 Block: var_tok ':' BlockItem
+   70      | var_tok ':'
+
+   71 BlockItem: Instruction
+   72          | BlockItem Instruction
+
+   73 Macro: var_tok macro_tok MacroExp BlockItem endm_tok
+
+   74 MacroExp: var_tok
+   75         | MacroExp ',' var_tok
+
+   76 Function: ret_tok
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 29
+')' (41) 29
+',' (44) 8 9 10 26 58 59 60 61 62 63 64 65 66 67 68 75
+':' (58) 5 6 7 8 9 10 69 70
+'[' (91) 52
+']' (93) 52
+error (256)
+err_tok (258)
+var_tok (259) 22 23 24 39 48 69 70 73 74 75
+num_tok (260) 28 29 57 60 61 67 68
+assume_tok (261) 5 6 7
+segment_tok (262) 11 12 13
+ends_tok (263) 11 12 13
+macro_tok (264) 73
+endm_tok (265) 73
+cs_tok (266) 5 8
+ss_tok (267) 7 10 37
+sp_tok (268) 38
+ds_tok (269) 6 9 36
+db_tok (270) 22
+dd_tok (271) 24
+dw_tok (272) 23
+string_tok (273) 27
+dup_tok (274) 29
+code_tok (275) 5 8 13 51
+data_tok (276) 6 9 11 49
+stack_tok (277) 7 10 12 50
+ax_tok (278) 30 52
+ah_tok (279) 40
+al_tok (280) 41
+bx_tok (281) 31
+bh_tok (282) 42
+bl_tok (283) 43
+cx_tok (284) 32
+ch_tok (285) 44
+cl_tok (286) 45
+dx_tok (287) 33
+dh_tok (288) 46
+dl_tok (289) 47
+si_tok (290) 34
+di_tok (291) 35
+ret_tok (292) 76
+int_tok (293) 57
+mov_tok (294) 58 59 60 61 62 63 64
+offset_tok (295) 39
+cmp_tok (296) 65 66 67 68
+
+
+Nonterminals, with rules where they appear
+
+$accept (48)
+    on left: 0
+input (49)
+    on left: 1 2, on right: 0 2
+CompUnit (50)
+    on left: 3 4, on right: 2
+Assume (51)
+    on left: 5 6 7 8 9 10, on right: 3 8 9 10
+Segment (52)
+    on left: 11 12 13, on right: 4
+Content (53)
+    on left: 14 15 16 17 18 19, on right: 13 17 18 19
+Alloca (54)
+    on left: 20 21, on right: 11 12 21
+AllocaLine (55)
+    on left: 22 23 24, on right: 20 21
+AllocaExpH (56)
+    on left: 25 26, on right: 22 23 24 26
+AllocaExp (57)
+    on left: 27 28 29, on right: 25 26
+RegS (58)
+    on left: 30 31 32 33 34 35 36 37 38 39, on right: 59 61 63 66 68
+RegE (59)
+    on left: 40 41 42 43 44 45 46 47, on right: 58 60 62 65 67
+MemAddr (60)
+    on left: 48 49 50 51 52, on right: 62 63 64
+Instruction (61)
+    on left: 53 54 55 56, on right: 71 72
+Int_ins (62)
+    on left: 57, on right: 53
+Mov_ins (63)
+    on left: 58 59 60 61 62 63 64, on right: 54
+Cmp_ins (64)
+    on left: 65 66 67 68, on right: 55
+Block (65)
+    on left: 69 70, on right: 14 17 56
+BlockItem (66)
+    on left: 71 72, on right: 69 72 73
+Macro (67)
+    on left: 73, on right: 15 18
+MacroExp (68)
+    on left: 74 75, on right: 73 75
+Function (69)
+    on left: 76, on right: 16 19
+
+
+state 0
+
+    0 $accept: . input $end
+
+    $default  reduce using rule 1 (input)
+
+    input  go to state 1
+
+
+state 1
+
+    0 $accept: input . $end
+    2 input: input . CompUnit
+
+    $end        shift, and go to state 2
+    assume_tok  shift, and go to state 3
+    code_tok    shift, and go to state 4
+    data_tok    shift, and go to state 5
+    stack_tok   shift, and go to state 6
+
+    CompUnit  go to state 7
+    Assume    go to state 8
+    Segment   go to state 9
+
+
+state 2
+
+    0 $accept: input $end .
+
+    $default  accept
+
+
+state 3
+
+    5 Assume: assume_tok . cs_tok ':' code_tok
+    6       | assume_tok . ds_tok ':' data_tok
+    7       | assume_tok . ss_tok ':' stack_tok
+
+    cs_tok  shift, and go to state 10
+    ss_tok  shift, and go to state 11
+    ds_tok  shift, and go to state 12
+
+
+state 4
+
+   13 Segment: code_tok . segment_tok Content code_tok ends_tok
+
+    segment_tok  shift, and go to state 13
+
+
+state 5
+
+   11 Segment: data_tok . segment_tok Alloca data_tok ends_tok
+
+    segment_tok  shift, and go to state 14
+
+
+state 6
+
+   12 Segment: stack_tok . segment_tok Alloca stack_tok ends_tok
+
+    segment_tok  shift, and go to state 15
+
+
+state 7
+
+    2 input: input CompUnit .
+
+    $default  reduce using rule 2 (input)
+
+
+state 8
+
+    3 CompUnit: Assume .
+    8 Assume: Assume . ',' cs_tok ':' code_tok
+    9       | Assume . ',' ds_tok ':' data_tok
+   10       | Assume . ',' ss_tok ':' stack_tok
+
+    ','  shift, and go to state 16
+
+    $default  reduce using rule 3 (CompUnit)
+
+
+state 9
+
+    4 CompUnit: Segment .
+
+    $default  reduce using rule 4 (CompUnit)
+
+
+state 10
+
+    5 Assume: assume_tok cs_tok . ':' code_tok
+
+    ':'  shift, and go to state 17
+
+
+state 11
+
+    7 Assume: assume_tok ss_tok . ':' stack_tok
+
+    ':'  shift, and go to state 18
+
+
+state 12
+
+    6 Assume: assume_tok ds_tok . ':' data_tok
+
+    ':'  shift, and go to state 19
+
+
+state 13
+
+   13 Segment: code_tok segment_tok . Content code_tok ends_tok
+
+    var_tok  shift, and go to state 20
+    ret_tok  shift, and go to state 21
+
+    Content   go to state 22
+    Block     go to state 23
+    Macro     go to state 24
+    Function  go to state 25
+
+
+state 14
+
+   11 Segment: data_tok segment_tok . Alloca data_tok ends_tok
+
+    var_tok  shift, and go to state 26
+
+    Alloca      go to state 27
+    AllocaLine  go to state 28
+
+
+state 15
+
+   12 Segment: stack_tok segment_tok . Alloca stack_tok ends_tok
+
+    var_tok  shift, and go to state 26
+
+    Alloca      go to state 29
+    AllocaLine  go to state 28
+
+
+state 16
+
+    8 Assume: Assume ',' . cs_tok ':' code_tok
+    9       | Assume ',' . ds_tok ':' data_tok
+   10       | Assume ',' . ss_tok ':' stack_tok
+
+    cs_tok  shift, and go to state 30
+    ss_tok  shift, and go to state 31
+    ds_tok  shift, and go to state 32
+
+
+state 17
+
+    5 Assume: assume_tok cs_tok ':' . code_tok
+
+    code_tok  shift, and go to state 33
+
+
+state 18
+
+    7 Assume: assume_tok ss_tok ':' . stack_tok
+
+    stack_tok  shift, and go to state 34
+
+
+state 19
+
+    6 Assume: assume_tok ds_tok ':' . data_tok
+
+    data_tok  shift, and go to state 35
+
+
+state 20
+
+   69 Block: var_tok . ':' BlockItem
+   70      | var_tok . ':'
+   73 Macro: var_tok . macro_tok MacroExp BlockItem endm_tok
+
+    macro_tok  shift, and go to state 36
+    ':'        shift, and go to state 37
+
+
+state 21
+
+   76 Function: ret_tok .
+
+    $default  reduce using rule 76 (Function)
+
+
+state 22
+
+   13 Segment: code_tok segment_tok Content . code_tok ends_tok
+   17 Content: Content . Block
+   18        | Content . Macro
+   19        | Content . Function
+
+    var_tok   shift, and go to state 20
+    code_tok  shift, and go to state 38
+    ret_tok   shift, and go to state 21
+
+    Block     go to state 39
+    Macro     go to state 40
+    Function  go to state 41
+
+
+state 23
+
+   14 Content: Block .
+
+    $default  reduce using rule 14 (Content)
+
+
+state 24
+
+   15 Content: Macro .
+
+    $default  reduce using rule 15 (Content)
+
+
+state 25
+
+   16 Content: Function .
+
+    $default  reduce using rule 16 (Content)
+
+
+state 26
+
+   22 AllocaLine: var_tok . db_tok AllocaExpH
+   23           | var_tok . dw_tok AllocaExpH
+   24           | var_tok . dd_tok AllocaExpH
+
+    db_tok  shift, and go to state 42
+    dd_tok  shift, and go to state 43
+    dw_tok  shift, and go to state 44
+
+
+state 27
+
+   11 Segment: data_tok segment_tok Alloca . data_tok ends_tok
+   21 Alloca: Alloca . AllocaLine
+
+    var_tok   shift, and go to state 26
+    data_tok  shift, and go to state 45
+
+    AllocaLine  go to state 46
+
+
+state 28
+
+   20 Alloca: AllocaLine .
+
+    $default  reduce using rule 20 (Alloca)
+
+
+state 29
+
+   12 Segment: stack_tok segment_tok Alloca . stack_tok ends_tok
+   21 Alloca: Alloca . AllocaLine
+
+    var_tok    shift, and go to state 26
+    stack_tok  shift, and go to state 47
+
+    AllocaLine  go to state 46
+
+
+state 30
+
+    8 Assume: Assume ',' cs_tok . ':' code_tok
+
+    ':'  shift, and go to state 48
+
+
+state 31
+
+   10 Assume: Assume ',' ss_tok . ':' stack_tok
+
+    ':'  shift, and go to state 49
+
+
+state 32
+
+    9 Assume: Assume ',' ds_tok . ':' data_tok
+
+    ':'  shift, and go to state 50
+
+
+state 33
+
+    5 Assume: assume_tok cs_tok ':' code_tok .
+
+    $default  reduce using rule 5 (Assume)
+
+
+state 34
+
+    7 Assume: assume_tok ss_tok ':' stack_tok .
+
+    $default  reduce using rule 7 (Assume)
+
+
+state 35
+
+    6 Assume: assume_tok ds_tok ':' data_tok .
+
+    $default  reduce using rule 6 (Assume)
+
+
+state 36
+
+   73 Macro: var_tok macro_tok . MacroExp BlockItem endm_tok
+
+    var_tok  shift, and go to state 51
+
+    MacroExp  go to state 52
+
+
+state 37
+
+   69 Block: var_tok ':' . BlockItem
+   70      | var_tok ':' .
+
+    var_tok  shift, and go to state 53
+    int_tok  shift, and go to state 54
+    mov_tok  shift, and go to state 55
+    cmp_tok  shift, and go to state 56
+
+    var_tok   [reduce using rule 70 (Block)]
+    int_tok   [reduce using rule 70 (Block)]
+    mov_tok   [reduce using rule 70 (Block)]
+    cmp_tok   [reduce using rule 70 (Block)]
+    $default  reduce using rule 70 (Block)
+
+    Instruction  go to state 57
+    Int_ins      go to state 58
+    Mov_ins      go to state 59
+    Cmp_ins      go to state 60
+    Block        go to state 61
+    BlockItem    go to state 62
+
+
+state 38
+
+   13 Segment: code_tok segment_tok Content code_tok . ends_tok
+
+    ends_tok  shift, and go to state 63
+
+
+state 39
+
+   17 Content: Content Block .
+
+    $default  reduce using rule 17 (Content)
+
+
+state 40
+
+   18 Content: Content Macro .
+
+    $default  reduce using rule 18 (Content)
+
+
+state 41
+
+   19 Content: Content Function .
+
+    $default  reduce using rule 19 (Content)
+
+
+state 42
+
+   22 AllocaLine: var_tok db_tok . AllocaExpH
+
+    num_tok     shift, and go to state 64
+    string_tok  shift, and go to state 65
+
+    AllocaExpH  go to state 66
+    AllocaExp   go to state 67
+
+
+state 43
+
+   24 AllocaLine: var_tok dd_tok . AllocaExpH
+
+    num_tok     shift, and go to state 64
+    string_tok  shift, and go to state 65
+
+    AllocaExpH  go to state 68
+    AllocaExp   go to state 67
+
+
+state 44
+
+   23 AllocaLine: var_tok dw_tok . AllocaExpH
+
+    num_tok     shift, and go to state 64
+    string_tok  shift, and go to state 65
+
+    AllocaExpH  go to state 69
+    AllocaExp   go to state 67
+
+
+state 45
+
+   11 Segment: data_tok segment_tok Alloca data_tok . ends_tok
+
+    ends_tok  shift, and go to state 70
+
+
+state 46
+
+   21 Alloca: Alloca AllocaLine .
+
+    $default  reduce using rule 21 (Alloca)
+
+
+state 47
+
+   12 Segment: stack_tok segment_tok Alloca stack_tok . ends_tok
+
+    ends_tok  shift, and go to state 71
+
+
+state 48
+
+    8 Assume: Assume ',' cs_tok ':' . code_tok
+
+    code_tok  shift, and go to state 72
+
+
+state 49
+
+   10 Assume: Assume ',' ss_tok ':' . stack_tok
+
+    stack_tok  shift, and go to state 73
+
+
+state 50
+
+    9 Assume: Assume ',' ds_tok ':' . data_tok
+
+    data_tok  shift, and go to state 74
+
+
+state 51
+
+   74 MacroExp: var_tok .
+
+    $default  reduce using rule 74 (MacroExp)
+
+
+state 52
+
+   73 Macro: var_tok macro_tok MacroExp . BlockItem endm_tok
+   75 MacroExp: MacroExp . ',' var_tok
+
+    var_tok  shift, and go to state 53
+    int_tok  shift, and go to state 54
+    mov_tok  shift, and go to state 55
+    cmp_tok  shift, and go to state 56
+    ','      shift, and go to state 75
+
+    Instruction  go to state 57
+    Int_ins      go to state 58
+    Mov_ins      go to state 59
+    Cmp_ins      go to state 60
+    Block        go to state 61
+    BlockItem    go to state 76
+
+
+state 53
+
+   69 Block: var_tok . ':' BlockItem
+   70      | var_tok . ':'
+
+    ':'  shift, and go to state 37
+
+
+state 54
+
+   57 Int_ins: int_tok . num_tok
+
+    num_tok  shift, and go to state 77
+
+
+state 55
+
+   58 Mov_ins: mov_tok . RegE ',' RegE
+   59        | mov_tok . RegS ',' RegS
+   60        | mov_tok . RegE ',' num_tok
+   61        | mov_tok . RegS ',' num_tok
+   62        | mov_tok . RegE ',' MemAddr
+   63        | mov_tok . RegS ',' MemAddr
+   64        | mov_tok . MemAddr ',' MemAddr
+
+    var_tok     shift, and go to state 78
+    ss_tok      shift, and go to state 79
+    sp_tok      shift, and go to state 80
+    ds_tok      shift, and go to state 81
+    code_tok    shift, and go to state 82
+    data_tok    shift, and go to state 83
+    stack_tok   shift, and go to state 84
+    ax_tok      shift, and go to state 85
+    ah_tok      shift, and go to state 86
+    al_tok      shift, and go to state 87
+    bx_tok      shift, and go to state 88
+    bh_tok      shift, and go to state 89
+    bl_tok      shift, and go to state 90
+    cx_tok      shift, and go to state 91
+    ch_tok      shift, and go to state 92
+    cl_tok      shift, and go to state 93
+    dx_tok      shift, and go to state 94
+    dh_tok      shift, and go to state 95
+    dl_tok      shift, and go to state 96
+    si_tok      shift, and go to state 97
+    di_tok      shift, and go to state 98
+    offset_tok  shift, and go to state 99
+    '['         shift, and go to state 100
+
+    RegS     go to state 101
+    RegE     go to state 102
+    MemAddr  go to state 103
+
+
+state 56
+
+   65 Cmp_ins: cmp_tok . RegE ',' RegE
+   66        | cmp_tok . RegS ',' RegS
+   67        | cmp_tok . RegE ',' num_tok
+   68        | cmp_tok . RegS ',' num_tok
+
+    ss_tok      shift, and go to state 79
+    sp_tok      shift, and go to state 80
+    ds_tok      shift, and go to state 81
+    ax_tok      shift, and go to state 85
+    ah_tok      shift, and go to state 86
+    al_tok      shift, and go to state 87
+    bx_tok      shift, and go to state 88
+    bh_tok      shift, and go to state 89
+    bl_tok      shift, and go to state 90
+    cx_tok      shift, and go to state 91
+    ch_tok      shift, and go to state 92
+    cl_tok      shift, and go to state 93
+    dx_tok      shift, and go to state 94
+    dh_tok      shift, and go to state 95
+    dl_tok      shift, and go to state 96
+    si_tok      shift, and go to state 97
+    di_tok      shift, and go to state 98
+    offset_tok  shift, and go to state 99
+
+    RegS  go to state 104
+    RegE  go to state 105
+
+
+state 57
+
+   71 BlockItem: Instruction .
+
+    $default  reduce using rule 71 (BlockItem)
+
+
+state 58
+
+   53 Instruction: Int_ins .
+
+    $default  reduce using rule 53 (Instruction)
+
+
+state 59
+
+   54 Instruction: Mov_ins .
+
+    $default  reduce using rule 54 (Instruction)
+
+
+state 60
+
+   55 Instruction: Cmp_ins .
+
+    $default  reduce using rule 55 (Instruction)
+
+
+state 61
+
+   56 Instruction: Block .
+
+    $default  reduce using rule 56 (Instruction)
+
+
+state 62
+
+   69 Block: var_tok ':' BlockItem .
+   72 BlockItem: BlockItem . Instruction
+
+    var_tok  shift, and go to state 53
+    int_tok  shift, and go to state 54
+    mov_tok  shift, and go to state 55
+    cmp_tok  shift, and go to state 56
+
+    var_tok   [reduce using rule 69 (Block)]
+    int_tok   [reduce using rule 69 (Block)]
+    mov_tok   [reduce using rule 69 (Block)]
+    cmp_tok   [reduce using rule 69 (Block)]
+    $default  reduce using rule 69 (Block)
+
+    Instruction  go to state 106
+    Int_ins      go to state 58
+    Mov_ins      go to state 59
+    Cmp_ins      go to state 60
+    Block        go to state 61
+
+
+state 63
+
+   13 Segment: code_tok segment_tok Content code_tok ends_tok .
+
+    $default  reduce using rule 13 (Segment)
+
+
+state 64
+
+   28 AllocaExp: num_tok .
+   29          | num_tok . dup_tok '(' num_tok ')'
+
+    dup_tok  shift, and go to state 107
+
+    $default  reduce using rule 28 (AllocaExp)
+
+
+state 65
+
+   27 AllocaExp: string_tok .
+
+    $default  reduce using rule 27 (AllocaExp)
+
+
+state 66
+
+   22 AllocaLine: var_tok db_tok AllocaExpH .
+   26 AllocaExpH: AllocaExpH . ',' AllocaExp
+
+    ','  shift, and go to state 108
+
+    $default  reduce using rule 22 (AllocaLine)
+
+
+state 67
+
+   25 AllocaExpH: AllocaExp .
+
+    $default  reduce using rule 25 (AllocaExpH)
+
+
+state 68
+
+   24 AllocaLine: var_tok dd_tok AllocaExpH .
+   26 AllocaExpH: AllocaExpH . ',' AllocaExp
+
+    ','  shift, and go to state 108
+
+    $default  reduce using rule 24 (AllocaLine)
+
+
+state 69
+
+   23 AllocaLine: var_tok dw_tok AllocaExpH .
+   26 AllocaExpH: AllocaExpH . ',' AllocaExp
+
+    ','  shift, and go to state 108
+
+    $default  reduce using rule 23 (AllocaLine)
+
+
+state 70
+
+   11 Segment: data_tok segment_tok Alloca data_tok ends_tok .
+
+    $default  reduce using rule 11 (Segment)
+
+
+state 71
+
+   12 Segment: stack_tok segment_tok Alloca stack_tok ends_tok .
+
+    $default  reduce using rule 12 (Segment)
+
+
+state 72
+
+    8 Assume: Assume ',' cs_tok ':' code_tok .
+
+    $default  reduce using rule 8 (Assume)
+
+
+state 73
+
+   10 Assume: Assume ',' ss_tok ':' stack_tok .
+
+    $default  reduce using rule 10 (Assume)
+
+
+state 74
+
+    9 Assume: Assume ',' ds_tok ':' data_tok .
+
+    $default  reduce using rule 9 (Assume)
+
+
+state 75
+
+   75 MacroExp: MacroExp ',' . var_tok
+
+    var_tok  shift, and go to state 109
+
+
+state 76
+
+   72 BlockItem: BlockItem . Instruction
+   73 Macro: var_tok macro_tok MacroExp BlockItem . endm_tok
+
+    var_tok   shift, and go to state 53
+    endm_tok  shift, and go to state 110
+    int_tok   shift, and go to state 54
+    mov_tok   shift, and go to state 55
+    cmp_tok   shift, and go to state 56
+
+    Instruction  go to state 106
+    Int_ins      go to state 58
+    Mov_ins      go to state 59
+    Cmp_ins      go to state 60
+    Block        go to state 61
+
+
+state 77
+
+   57 Int_ins: int_tok num_tok .
+
+    $default  reduce using rule 57 (Int_ins)
+
+
+state 78
+
+   48 MemAddr: var_tok .
+
+    $default  reduce using rule 48 (MemAddr)
+
+
+state 79
+
+   37 RegS: ss_tok .
+
+    $default  reduce using rule 37 (RegS)
+
+
+state 80
+
+   38 RegS: sp_tok .
+
+    $default  reduce using rule 38 (RegS)
+
+
+state 81
+
+   36 RegS: ds_tok .
+
+    $default  reduce using rule 36 (RegS)
+
+
+state 82
+
+   51 MemAddr: code_tok .
+
+    $default  reduce using rule 51 (MemAddr)
+
+
+state 83
+
+   49 MemAddr: data_tok .
+
+    $default  reduce using rule 49 (MemAddr)
+
+
+state 84
+
+   50 MemAddr: stack_tok .
+
+    $default  reduce using rule 50 (MemAddr)
+
+
+state 85
+
+   30 RegS: ax_tok .
+
+    $default  reduce using rule 30 (RegS)
+
+
+state 86
+
+   40 RegE: ah_tok .
+
+    $default  reduce using rule 40 (RegE)
+
+
+state 87
+
+   41 RegE: al_tok .
+
+    $default  reduce using rule 41 (RegE)
+
+
+state 88
+
+   31 RegS: bx_tok .
+
+    $default  reduce using rule 31 (RegS)
+
+
+state 89
+
+   42 RegE: bh_tok .
+
+    $default  reduce using rule 42 (RegE)
+
+
+state 90
+
+   43 RegE: bl_tok .
+
+    $default  reduce using rule 43 (RegE)
+
+
+state 91
+
+   32 RegS: cx_tok .
+
+    $default  reduce using rule 32 (RegS)
+
+
+state 92
+
+   44 RegE: ch_tok .
+
+    $default  reduce using rule 44 (RegE)
+
+
+state 93
+
+   45 RegE: cl_tok .
+
+    $default  reduce using rule 45 (RegE)
+
+
+state 94
+
+   33 RegS: dx_tok .
+
+    $default  reduce using rule 33 (RegS)
+
+
+state 95
+
+   46 RegE: dh_tok .
+
+    $default  reduce using rule 46 (RegE)
+
+
+state 96
+
+   47 RegE: dl_tok .
+
+    $default  reduce using rule 47 (RegE)
+
+
+state 97
+
+   34 RegS: si_tok .
+
+    $default  reduce using rule 34 (RegS)
+
+
+state 98
+
+   35 RegS: di_tok .
+
+    $default  reduce using rule 35 (RegS)
+
+
+state 99
+
+   39 RegS: offset_tok . var_tok
+
+    var_tok  shift, and go to state 111
+
+
+state 100
+
+   52 MemAddr: '[' . ax_tok ']'
+
+    ax_tok  shift, and go to state 112
+
+
+state 101
+
+   59 Mov_ins: mov_tok RegS . ',' RegS
+   61        | mov_tok RegS . ',' num_tok
+   63        | mov_tok RegS . ',' MemAddr
+
+    ','  shift, and go to state 113
+
+
+state 102
+
+   58 Mov_ins: mov_tok RegE . ',' RegE
+   60        | mov_tok RegE . ',' num_tok
+   62        | mov_tok RegE . ',' MemAddr
+
+    ','  shift, and go to state 114
+
+
+state 103
+
+   64 Mov_ins: mov_tok MemAddr . ',' MemAddr
+
+    ','  shift, and go to state 115
+
+
+state 104
+
+   66 Cmp_ins: cmp_tok RegS . ',' RegS
+   68        | cmp_tok RegS . ',' num_tok
+
+    ','  shift, and go to state 116
+
+
+state 105
+
+   65 Cmp_ins: cmp_tok RegE . ',' RegE
+   67        | cmp_tok RegE . ',' num_tok
+
+    ','  shift, and go to state 117
+
+
+state 106
+
+   72 BlockItem: BlockItem Instruction .
+
+    $default  reduce using rule 72 (BlockItem)
+
+
+state 107
+
+   29 AllocaExp: num_tok dup_tok . '(' num_tok ')'
+
+    '('  shift, and go to state 118
+
+
+state 108
+
+   26 AllocaExpH: AllocaExpH ',' . AllocaExp
+
+    num_tok     shift, and go to state 64
+    string_tok  shift, and go to state 65
+
+    AllocaExp  go to state 119
+
+
+state 109
+
+   75 MacroExp: MacroExp ',' var_tok .
+
+    $default  reduce using rule 75 (MacroExp)
+
+
+state 110
+
+   73 Macro: var_tok macro_tok MacroExp BlockItem endm_tok .
+
+    $default  reduce using rule 73 (Macro)
+
+
+state 111
+
+   39 RegS: offset_tok var_tok .
+
+    $default  reduce using rule 39 (RegS)
+
+
+state 112
+
+   52 MemAddr: '[' ax_tok . ']'
+
+    ']'  shift, and go to state 120
+
+
+state 113
+
+   59 Mov_ins: mov_tok RegS ',' . RegS
+   61        | mov_tok RegS ',' . num_tok
+   63        | mov_tok RegS ',' . MemAddr
+
+    var_tok     shift, and go to state 78
+    num_tok     shift, and go to state 121
+    ss_tok      shift, and go to state 79
+    sp_tok      shift, and go to state 80
+    ds_tok      shift, and go to state 81
+    code_tok    shift, and go to state 82
+    data_tok    shift, and go to state 83
+    stack_tok   shift, and go to state 84
+    ax_tok      shift, and go to state 85
+    bx_tok      shift, and go to state 88
+    cx_tok      shift, and go to state 91
+    dx_tok      shift, and go to state 94
+    si_tok      shift, and go to state 97
+    di_tok      shift, and go to state 98
+    offset_tok  shift, and go to state 99
+    '['         shift, and go to state 100
+
+    RegS     go to state 122
+    MemAddr  go to state 123
+
+
+state 114
+
+   58 Mov_ins: mov_tok RegE ',' . RegE
+   60        | mov_tok RegE ',' . num_tok
+   62        | mov_tok RegE ',' . MemAddr
+
+    var_tok    shift, and go to state 78
+    num_tok    shift, and go to state 124
+    code_tok   shift, and go to state 82
+    data_tok   shift, and go to state 83
+    stack_tok  shift, and go to state 84
+    ah_tok     shift, and go to state 86
+    al_tok     shift, and go to state 87
+    bh_tok     shift, and go to state 89
+    bl_tok     shift, and go to state 90
+    ch_tok     shift, and go to state 92
+    cl_tok     shift, and go to state 93
+    dh_tok     shift, and go to state 95
+    dl_tok     shift, and go to state 96
+    '['        shift, and go to state 100
+
+    RegE     go to state 125
+    MemAddr  go to state 126
+
+
+state 115
+
+   64 Mov_ins: mov_tok MemAddr ',' . MemAddr
+
+    var_tok    shift, and go to state 78
+    code_tok   shift, and go to state 82
+    data_tok   shift, and go to state 83
+    stack_tok  shift, and go to state 84
+    '['        shift, and go to state 100
+
+    MemAddr  go to state 127
+
+
+state 116
+
+   66 Cmp_ins: cmp_tok RegS ',' . RegS
+   68        | cmp_tok RegS ',' . num_tok
+
+    num_tok     shift, and go to state 128
+    ss_tok      shift, and go to state 79
+    sp_tok      shift, and go to state 80
+    ds_tok      shift, and go to state 81
+    ax_tok      shift, and go to state 85
+    bx_tok      shift, and go to state 88
+    cx_tok      shift, and go to state 91
+    dx_tok      shift, and go to state 94
+    si_tok      shift, and go to state 97
+    di_tok      shift, and go to state 98
+    offset_tok  shift, and go to state 99
+
+    RegS  go to state 129
+
+
+state 117
+
+   65 Cmp_ins: cmp_tok RegE ',' . RegE
+   67        | cmp_tok RegE ',' . num_tok
+
+    num_tok  shift, and go to state 130
+    ah_tok   shift, and go to state 86
+    al_tok   shift, and go to state 87
+    bh_tok   shift, and go to state 89
+    bl_tok   shift, and go to state 90
+    ch_tok   shift, and go to state 92
+    cl_tok   shift, and go to state 93
+    dh_tok   shift, and go to state 95
+    dl_tok   shift, and go to state 96
+
+    RegE  go to state 131
+
+
+state 118
+
+   29 AllocaExp: num_tok dup_tok '(' . num_tok ')'
+
+    num_tok  shift, and go to state 132
+
+
+state 119
+
+   26 AllocaExpH: AllocaExpH ',' AllocaExp .
+
+    $default  reduce using rule 26 (AllocaExpH)
+
+
+state 120
+
+   52 MemAddr: '[' ax_tok ']' .
+
+    $default  reduce using rule 52 (MemAddr)
+
+
+state 121
+
+   61 Mov_ins: mov_tok RegS ',' num_tok .
+
+    $default  reduce using rule 61 (Mov_ins)
+
+
+state 122
+
+   59 Mov_ins: mov_tok RegS ',' RegS .
+
+    $default  reduce using rule 59 (Mov_ins)
+
+
+state 123
+
+   63 Mov_ins: mov_tok RegS ',' MemAddr .
+
+    $default  reduce using rule 63 (Mov_ins)
+
+
+state 124
+
+   60 Mov_ins: mov_tok RegE ',' num_tok .
+
+    $default  reduce using rule 60 (Mov_ins)
+
+
+state 125
+
+   58 Mov_ins: mov_tok RegE ',' RegE .
+
+    $default  reduce using rule 58 (Mov_ins)
+
+
+state 126
+
+   62 Mov_ins: mov_tok RegE ',' MemAddr .
+
+    $default  reduce using rule 62 (Mov_ins)
+
+
+state 127
+
+   64 Mov_ins: mov_tok MemAddr ',' MemAddr .
+
+    $default  reduce using rule 64 (Mov_ins)
+
+
+state 128
+
+   68 Cmp_ins: cmp_tok RegS ',' num_tok .
+
+    $default  reduce using rule 68 (Cmp_ins)
+
+
+state 129
+
+   66 Cmp_ins: cmp_tok RegS ',' RegS .
+
+    $default  reduce using rule 66 (Cmp_ins)
+
+
+state 130
+
+   67 Cmp_ins: cmp_tok RegE ',' num_tok .
+
+    $default  reduce using rule 67 (Cmp_ins)
+
+
+state 131
+
+   65 Cmp_ins: cmp_tok RegE ',' RegE .
+
+    $default  reduce using rule 65 (Cmp_ins)
+
+
+state 132
+
+   29 AllocaExp: num_tok dup_tok '(' num_tok . ')'
+
+    ')'  shift, and go to state 133
+
+
+state 133
+
+   29 AllocaExp: num_tok dup_tok '(' num_tok ')' .
+
+    $default  reduce using rule 29 (AllocaExp)

@@ -1,0 +1,2753 @@
+Terminals which are not used
+
+   err_tok
+
+
+State 37 conflicts: 22 reduce/reduce
+State 100 conflicts: 22 shift/reduce
+
+
+Grammar
+
+    0 $accept: input $end
+
+    1 input: /* empty */
+    2      | input CompUnit
+
+    3 CompUnit: Assume
+    4         | Segment
+    5         | end_tok var_tok
+
+    6 Assume: assume_tok cs_tok ':' code_tok
+    7       | assume_tok ds_tok ':' data_tok
+    8       | assume_tok ss_tok ':' stack_tok
+    9       | Assume ',' cs_tok ':' code_tok
+   10       | Assume ',' ds_tok ':' data_tok
+   11       | Assume ',' ss_tok ':' stack_tok
+
+   12 Segment: data_tok segment_tok Alloca data_tok ends_tok
+   13        | stack_tok segment_tok Alloca stack_tok ends_tok
+   14        | code_tok segment_tok Content code_tok ends_tok
+
+   15 Content: Block
+   16        | Macro
+   17        | Content Block
+   18        | Content Macro
+
+   19 Alloca: AllocaLine
+   20       | Alloca AllocaLine
+
+   21 @1: /* empty */
+
+   22 AllocaLine: var_tok db_tok @1 AllocaExpH
+
+   23 @2: /* empty */
+
+   24 AllocaLine: var_tok dw_tok @2 AllocaExpH
+
+   25 @3: /* empty */
+
+   26 AllocaLine: var_tok dd_tok @3 AllocaExpH
+
+   27 AllocaExpH: AllocaExp
+   28           | AllocaExpH ',' AllocaExp
+
+   29 AllocaExp: string_tok
+   30          | num_tok
+   31          | num_tok dup_tok '(' num_tok ')'
+
+   32 RegS: ax_tok
+   33     | bx_tok
+   34     | cx_tok
+   35     | dx_tok
+   36     | si_tok
+   37     | di_tok
+   38     | ds_tok
+   39     | ss_tok
+   40     | sp_tok
+   41     | offset_tok var_tok
+
+   42 RegE: ah_tok
+   43     | al_tok
+   44     | bh_tok
+   45     | bl_tok
+   46     | ch_tok
+   47     | cl_tok
+   48     | dh_tok
+   49     | dl_tok
+
+   50 MemAddr: var_tok
+   51        | data_tok
+   52        | stack_tok
+   53        | code_tok
+   54        | MemAddrExp
+
+   55 MemAddrExp: '[' num_tok ']'
+   56           | '[' MemAddrExp_a ']'
+   57           | '[' MemAddrExp_a '+' MemAddrExp_a ']'
+   58           | '[' MemAddrExp_a num_tok ']'
+   59           | '[' MemAddrExp_a '+' MemAddrExp_a num_tok ']'
+
+   60 MemAddrExp_a: ax_tok
+   61             | bx_tok
+   62             | cx_tok
+   63             | dx_tok
+   64             | si_tok
+   65             | di_tok
+
+   66 DoubleOE: RegE ',' RegE
+   67         | RegE ',' num_tok
+   68         | RegE ',' MemAddr
+   69         | MemAddr ',' RegE
+   70         | MemAddr ',' num_tok
+   71         | MemAddr ',' MemAddr
+   72         | byte_tok ptr_tok MemAddr ',' MemAddr
+   73         | byte_tok ptr_tok MemAddr ',' num_tok
+
+   74 DoubleOS: RegS ',' RegS
+   75         | RegS ',' num_tok
+   76         | RegS ',' MemAddr
+   77         | MemAddr ',' RegS
+   78         | word_tok ptr_tok MemAddr ',' MemAddr
+   79         | word_tok ptr_tok MemAddr ',' num_tok
+
+   80 Instruction: Int_ins
+   81            | Mov_ins
+   82            | Cmp_ins
+   83            | Jmp_ins
+   84            | Add_ins
+   85            | Sub_ins
+   86            | Mul_ins
+   87            | Div_ins
+   88            | Call_ins
+   89            | Push_ins
+   90            | Pop_ins
+   91            | Ret_ins
+   92            | Block
+
+   93 Int_ins: int_tok num_tok
+
+   94 Mov_ins: mov_tok DoubleOE
+   95        | mov_tok DoubleOS
+
+   96 Cmp_ins: cmp_tok DoubleOE
+   97        | cmp_tok DoubleOS
+
+   98 Jmp_ins: jmp_tok var_tok
+   99        | jle_tok var_tok
+  100        | jl_tok var_tok
+  101        | jge_tok var_tok
+  102        | jg_tok var_tok
+  103        | je_tok var_tok
+  104        | jne_tok var_tok
+  105        | loop_tok var_tok
+
+  106 Add_ins: add_tok DoubleOE
+  107        | add_tok DoubleOS
+  108        | inc_tok RegE
+  109        | inc_tok RegS
+  110        | inc_tok MemAddr
+
+  111 Sub_ins: sub_tok DoubleOE
+  112        | sub_tok DoubleOS
+  113        | dec_tok RegE
+  114        | dec_tok RegS
+  115        | dec_tok MemAddr
+
+  116 Mul_ins: mul_tok RegE
+  117        | mul_tok RegS
+  118        | mul_tok MemAddr
+  119        | mul_tok word_tok ptr_tok MemAddr
+  120        | mul_tok byte_tok ptr_tok MemAddr
+
+  121 Div_ins: div_tok RegE
+  122        | div_tok RegS
+  123        | div_tok MemAddr
+  124        | div_tok word_tok ptr_tok MemAddr
+  125        | div_tok byte_tok ptr_tok MemAddr
+
+  126 Call_ins: call_tok var_tok
+
+  127 Push_ins: push_tok RegE
+  128         | push_tok RegS
+
+  129 Pop_ins: pop_tok RegE
+  130        | pop_tok RegS
+
+  131 Ret_ins: ret_tok
+
+  132 @4: /* empty */
+
+  133 Block: var_tok ':' @4 BlockItem
+  134      | var_tok ':'
+
+  135 BlockItem: Instruction
+  136          | BlockItem Instruction
+
+  137 Macro: var_tok macro_tok MacroExp BlockItem endm_tok
+
+  138 MacroExp: var_tok
+  139         | MacroExp ',' var_tok
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 31
+')' (41) 31
+'+' (43) 57 59
+',' (44) 9 10 11 28 66 67 68 69 70 71 72 73 74 75 76 77 78 79 139
+':' (58) 6 7 8 9 10 11 133 134
+'[' (91) 55 56 57 58 59
+']' (93) 55 56 57 58 59
+error (256)
+err_tok (258)
+var_tok (259) 5 22 24 26 41 50 98 99 100 101 102 103 104 105 126 133
+    134 137 138 139
+num_tok (260) 30 31 55 58 59 67 70 73 75 79 93
+assume_tok (261) 6 7 8
+segment_tok (262) 12 13 14
+ends_tok (263) 12 13 14
+macro_tok (264) 137
+endm_tok (265) 137
+end_tok (266) 5
+cs_tok (267) 6 9
+ss_tok (268) 8 11 39
+sp_tok (269) 40
+ds_tok (270) 7 10 38
+db_tok (271) 22
+dd_tok (272) 26
+dw_tok (273) 24
+string_tok (274) 29
+dup_tok (275) 31
+code_tok (276) 6 9 14 53
+data_tok (277) 7 10 12 51
+stack_tok (278) 8 11 13 52
+ax_tok (279) 32 60
+ah_tok (280) 42
+al_tok (281) 43
+bx_tok (282) 33 61
+bh_tok (283) 44
+bl_tok (284) 45
+cx_tok (285) 34 62
+ch_tok (286) 46
+cl_tok (287) 47
+dx_tok (288) 35 63
+dh_tok (289) 48
+dl_tok (290) 49
+si_tok (291) 36 64
+di_tok (292) 37 65
+ret_tok (293) 131
+int_tok (294) 93
+mov_tok (295) 94 95
+offset_tok (296) 41
+byte_tok (297) 72 73 120 125
+word_tok (298) 78 79 119 124
+ptr_tok (299) 72 73 78 79 119 120 124 125
+cmp_tok (300) 96 97
+call_tok (301) 126
+push_tok (302) 127 128
+pop_tok (303) 129 130
+add_tok (304) 106 107
+sub_tok (305) 111 112
+inc_tok (306) 108 109 110
+dec_tok (307) 113 114 115
+mul_tok (308) 116 117 118 119 120
+div_tok (309) 121 122 123 124 125
+jmp_tok (310) 98
+jle_tok (311) 99
+jl_tok (312) 100
+jge_tok (313) 101
+jg_tok (314) 102
+je_tok (315) 103
+jne_tok (316) 104
+loop_tok (317) 105
+
+
+Nonterminals, with rules where they appear
+
+$accept (70)
+    on left: 0
+input (71)
+    on left: 1 2, on right: 0 2
+CompUnit (72)
+    on left: 3 4 5, on right: 2
+Assume (73)
+    on left: 6 7 8 9 10 11, on right: 3 9 10 11
+Segment (74)
+    on left: 12 13 14, on right: 4
+Content (75)
+    on left: 15 16 17 18, on right: 14 17 18
+Alloca (76)
+    on left: 19 20, on right: 12 13 20
+AllocaLine (77)
+    on left: 22 24 26, on right: 19 20
+@1 (78)
+    on left: 21, on right: 22
+@2 (79)
+    on left: 23, on right: 24
+@3 (80)
+    on left: 25, on right: 26
+AllocaExpH (81)
+    on left: 27 28, on right: 22 24 26 28
+AllocaExp (82)
+    on left: 29 30 31, on right: 27 28
+RegS (83)
+    on left: 32 33 34 35 36 37 38 39 40 41, on right: 74 75 76 77 109
+    114 117 122 128 130
+RegE (84)
+    on left: 42 43 44 45 46 47 48 49, on right: 66 67 68 69 108 113
+    116 121 127 129
+MemAddr (85)
+    on left: 50 51 52 53 54, on right: 68 69 70 71 72 73 76 77 78 79
+    110 115 118 119 120 123 124 125
+MemAddrExp (86)
+    on left: 55 56 57 58 59, on right: 54
+MemAddrExp_a (87)
+    on left: 60 61 62 63 64 65, on right: 56 57 58 59
+DoubleOE (88)
+    on left: 66 67 68 69 70 71 72 73, on right: 94 96 106 111
+DoubleOS (89)
+    on left: 74 75 76 77 78 79, on right: 95 97 107 112
+Instruction (90)
+    on left: 80 81 82 83 84 85 86 87 88 89 90 91 92,
+    on right: 135 136
+Int_ins (91)
+    on left: 93, on right: 80
+Mov_ins (92)
+    on left: 94 95, on right: 81
+Cmp_ins (93)
+    on left: 96 97, on right: 82
+Jmp_ins (94)
+    on left: 98 99 100 101 102 103 104 105, on right: 83
+Add_ins (95)
+    on left: 106 107 108 109 110, on right: 84
+Sub_ins (96)
+    on left: 111 112 113 114 115, on right: 85
+Mul_ins (97)
+    on left: 116 117 118 119 120, on right: 86
+Div_ins (98)
+    on left: 121 122 123 124 125, on right: 87
+Call_ins (99)
+    on left: 126, on right: 88
+Push_ins (100)
+    on left: 127 128, on right: 89
+Pop_ins (101)
+    on left: 129 130, on right: 90
+Ret_ins (102)
+    on left: 131, on right: 91
+Block (103)
+    on left: 133 134, on right: 15 17 92
+@4 (104)
+    on left: 132, on right: 133
+BlockItem (105)
+    on left: 135 136, on right: 133 136 137
+Macro (106)
+    on left: 137, on right: 16 18
+MacroExp (107)
+    on left: 138 139, on right: 137 139
+
+
+state 0
+
+    0 $accept: . input $end
+
+    $default  reduce using rule 1 (input)
+
+    input  go to state 1
+
+
+state 1
+
+    0 $accept: input . $end
+    2 input: input . CompUnit
+
+    $end        shift, and go to state 2
+    assume_tok  shift, and go to state 3
+    end_tok     shift, and go to state 4
+    code_tok    shift, and go to state 5
+    data_tok    shift, and go to state 6
+    stack_tok   shift, and go to state 7
+
+    CompUnit  go to state 8
+    Assume    go to state 9
+    Segment   go to state 10
+
+
+state 2
+
+    0 $accept: input $end .
+
+    $default  accept
+
+
+state 3
+
+    6 Assume: assume_tok . cs_tok ':' code_tok
+    7       | assume_tok . ds_tok ':' data_tok
+    8       | assume_tok . ss_tok ':' stack_tok
+
+    cs_tok  shift, and go to state 11
+    ss_tok  shift, and go to state 12
+    ds_tok  shift, and go to state 13
+
+
+state 4
+
+    5 CompUnit: end_tok . var_tok
+
+    var_tok  shift, and go to state 14
+
+
+state 5
+
+   14 Segment: code_tok . segment_tok Content code_tok ends_tok
+
+    segment_tok  shift, and go to state 15
+
+
+state 6
+
+   12 Segment: data_tok . segment_tok Alloca data_tok ends_tok
+
+    segment_tok  shift, and go to state 16
+
+
+state 7
+
+   13 Segment: stack_tok . segment_tok Alloca stack_tok ends_tok
+
+    segment_tok  shift, and go to state 17
+
+
+state 8
+
+    2 input: input CompUnit .
+
+    $default  reduce using rule 2 (input)
+
+
+state 9
+
+    3 CompUnit: Assume .
+    9 Assume: Assume . ',' cs_tok ':' code_tok
+   10       | Assume . ',' ds_tok ':' data_tok
+   11       | Assume . ',' ss_tok ':' stack_tok
+
+    ','  shift, and go to state 18
+
+    $default  reduce using rule 3 (CompUnit)
+
+
+state 10
+
+    4 CompUnit: Segment .
+
+    $default  reduce using rule 4 (CompUnit)
+
+
+state 11
+
+    6 Assume: assume_tok cs_tok . ':' code_tok
+
+    ':'  shift, and go to state 19
+
+
+state 12
+
+    8 Assume: assume_tok ss_tok . ':' stack_tok
+
+    ':'  shift, and go to state 20
+
+
+state 13
+
+    7 Assume: assume_tok ds_tok . ':' data_tok
+
+    ':'  shift, and go to state 21
+
+
+state 14
+
+    5 CompUnit: end_tok var_tok .
+
+    $default  reduce using rule 5 (CompUnit)
+
+
+state 15
+
+   14 Segment: code_tok segment_tok . Content code_tok ends_tok
+
+    var_tok  shift, and go to state 22
+
+    Content  go to state 23
+    Block    go to state 24
+    Macro    go to state 25
+
+
+state 16
+
+   12 Segment: data_tok segment_tok . Alloca data_tok ends_tok
+
+    var_tok  shift, and go to state 26
+
+    Alloca      go to state 27
+    AllocaLine  go to state 28
+
+
+state 17
+
+   13 Segment: stack_tok segment_tok . Alloca stack_tok ends_tok
+
+    var_tok  shift, and go to state 26
+
+    Alloca      go to state 29
+    AllocaLine  go to state 28
+
+
+state 18
+
+    9 Assume: Assume ',' . cs_tok ':' code_tok
+   10       | Assume ',' . ds_tok ':' data_tok
+   11       | Assume ',' . ss_tok ':' stack_tok
+
+    cs_tok  shift, and go to state 30
+    ss_tok  shift, and go to state 31
+    ds_tok  shift, and go to state 32
+
+
+state 19
+
+    6 Assume: assume_tok cs_tok ':' . code_tok
+
+    code_tok  shift, and go to state 33
+
+
+state 20
+
+    8 Assume: assume_tok ss_tok ':' . stack_tok
+
+    stack_tok  shift, and go to state 34
+
+
+state 21
+
+    7 Assume: assume_tok ds_tok ':' . data_tok
+
+    data_tok  shift, and go to state 35
+
+
+state 22
+
+  133 Block: var_tok . ':' @4 BlockItem
+  134      | var_tok . ':'
+  137 Macro: var_tok . macro_tok MacroExp BlockItem endm_tok
+
+    macro_tok  shift, and go to state 36
+    ':'        shift, and go to state 37
+
+
+state 23
+
+   14 Segment: code_tok segment_tok Content . code_tok ends_tok
+   17 Content: Content . Block
+   18        | Content . Macro
+
+    var_tok   shift, and go to state 22
+    code_tok  shift, and go to state 38
+
+    Block  go to state 39
+    Macro  go to state 40
+
+
+state 24
+
+   15 Content: Block .
+
+    $default  reduce using rule 15 (Content)
+
+
+state 25
+
+   16 Content: Macro .
+
+    $default  reduce using rule 16 (Content)
+
+
+state 26
+
+   22 AllocaLine: var_tok . db_tok @1 AllocaExpH
+   24           | var_tok . dw_tok @2 AllocaExpH
+   26           | var_tok . dd_tok @3 AllocaExpH
+
+    db_tok  shift, and go to state 41
+    dd_tok  shift, and go to state 42
+    dw_tok  shift, and go to state 43
+
+
+state 27
+
+   12 Segment: data_tok segment_tok Alloca . data_tok ends_tok
+   20 Alloca: Alloca . AllocaLine
+
+    var_tok   shift, and go to state 26
+    data_tok  shift, and go to state 44
+
+    AllocaLine  go to state 45
+
+
+state 28
+
+   19 Alloca: AllocaLine .
+
+    $default  reduce using rule 19 (Alloca)
+
+
+state 29
+
+   13 Segment: stack_tok segment_tok Alloca . stack_tok ends_tok
+   20 Alloca: Alloca . AllocaLine
+
+    var_tok    shift, and go to state 26
+    stack_tok  shift, and go to state 46
+
+    AllocaLine  go to state 45
+
+
+state 30
+
+    9 Assume: Assume ',' cs_tok . ':' code_tok
+
+    ':'  shift, and go to state 47
+
+
+state 31
+
+   11 Assume: Assume ',' ss_tok . ':' stack_tok
+
+    ':'  shift, and go to state 48
+
+
+state 32
+
+   10 Assume: Assume ',' ds_tok . ':' data_tok
+
+    ':'  shift, and go to state 49
+
+
+state 33
+
+    6 Assume: assume_tok cs_tok ':' code_tok .
+
+    $default  reduce using rule 6 (Assume)
+
+
+state 34
+
+    8 Assume: assume_tok ss_tok ':' stack_tok .
+
+    $default  reduce using rule 8 (Assume)
+
+
+state 35
+
+    7 Assume: assume_tok ds_tok ':' data_tok .
+
+    $default  reduce using rule 7 (Assume)
+
+
+state 36
+
+  137 Macro: var_tok macro_tok . MacroExp BlockItem endm_tok
+
+    var_tok  shift, and go to state 50
+
+    MacroExp  go to state 51
+
+
+state 37
+
+  133 Block: var_tok ':' . @4 BlockItem
+  134      | var_tok ':' .
+
+    var_tok   reduce using rule 132 (@4)
+    var_tok   [reduce using rule 134 (Block)]
+    endm_tok  reduce using rule 134 (Block)
+    code_tok  reduce using rule 134 (Block)
+    ret_tok   reduce using rule 132 (@4)
+    ret_tok   [reduce using rule 134 (Block)]
+    int_tok   reduce using rule 132 (@4)
+    int_tok   [reduce using rule 134 (Block)]
+    mov_tok   reduce using rule 132 (@4)
+    mov_tok   [reduce using rule 134 (Block)]
+    cmp_tok   reduce using rule 132 (@4)
+    cmp_tok   [reduce using rule 134 (Block)]
+    call_tok  reduce using rule 132 (@4)
+    call_tok  [reduce using rule 134 (Block)]
+    push_tok  reduce using rule 132 (@4)
+    push_tok  [reduce using rule 134 (Block)]
+    pop_tok   reduce using rule 132 (@4)
+    pop_tok   [reduce using rule 134 (Block)]
+    add_tok   reduce using rule 132 (@4)
+    add_tok   [reduce using rule 134 (Block)]
+    sub_tok   reduce using rule 132 (@4)
+    sub_tok   [reduce using rule 134 (Block)]
+    inc_tok   reduce using rule 132 (@4)
+    inc_tok   [reduce using rule 134 (Block)]
+    dec_tok   reduce using rule 132 (@4)
+    dec_tok   [reduce using rule 134 (Block)]
+    mul_tok   reduce using rule 132 (@4)
+    mul_tok   [reduce using rule 134 (Block)]
+    div_tok   reduce using rule 132 (@4)
+    div_tok   [reduce using rule 134 (Block)]
+    jmp_tok   reduce using rule 132 (@4)
+    jmp_tok   [reduce using rule 134 (Block)]
+    jle_tok   reduce using rule 132 (@4)
+    jle_tok   [reduce using rule 134 (Block)]
+    jl_tok    reduce using rule 132 (@4)
+    jl_tok    [reduce using rule 134 (Block)]
+    jge_tok   reduce using rule 132 (@4)
+    jge_tok   [reduce using rule 134 (Block)]
+    jg_tok    reduce using rule 132 (@4)
+    jg_tok    [reduce using rule 134 (Block)]
+    je_tok    reduce using rule 132 (@4)
+    je_tok    [reduce using rule 134 (Block)]
+    jne_tok   reduce using rule 132 (@4)
+    jne_tok   [reduce using rule 134 (Block)]
+    loop_tok  reduce using rule 132 (@4)
+    loop_tok  [reduce using rule 134 (Block)]
+    $default  reduce using rule 132 (@4)
+
+    @4  go to state 52
+
+
+state 38
+
+   14 Segment: code_tok segment_tok Content code_tok . ends_tok
+
+    ends_tok  shift, and go to state 53
+
+
+state 39
+
+   17 Content: Content Block .
+
+    $default  reduce using rule 17 (Content)
+
+
+state 40
+
+   18 Content: Content Macro .
+
+    $default  reduce using rule 18 (Content)
+
+
+state 41
+
+   22 AllocaLine: var_tok db_tok . @1 AllocaExpH
+
+    $default  reduce using rule 21 (@1)
+
+    @1  go to state 54
+
+
+state 42
+
+   26 AllocaLine: var_tok dd_tok . @3 AllocaExpH
+
+    $default  reduce using rule 25 (@3)
+
+    @3  go to state 55
+
+
+state 43
+
+   24 AllocaLine: var_tok dw_tok . @2 AllocaExpH
+
+    $default  reduce using rule 23 (@2)
+
+    @2  go to state 56
+
+
+state 44
+
+   12 Segment: data_tok segment_tok Alloca data_tok . ends_tok
+
+    ends_tok  shift, and go to state 57
+
+
+state 45
+
+   20 Alloca: Alloca AllocaLine .
+
+    $default  reduce using rule 20 (Alloca)
+
+
+state 46
+
+   13 Segment: stack_tok segment_tok Alloca stack_tok . ends_tok
+
+    ends_tok  shift, and go to state 58
+
+
+state 47
+
+    9 Assume: Assume ',' cs_tok ':' . code_tok
+
+    code_tok  shift, and go to state 59
+
+
+state 48
+
+   11 Assume: Assume ',' ss_tok ':' . stack_tok
+
+    stack_tok  shift, and go to state 60
+
+
+state 49
+
+   10 Assume: Assume ',' ds_tok ':' . data_tok
+
+    data_tok  shift, and go to state 61
+
+
+state 50
+
+  138 MacroExp: var_tok .
+
+    $default  reduce using rule 138 (MacroExp)
+
+
+state 51
+
+  137 Macro: var_tok macro_tok MacroExp . BlockItem endm_tok
+  139 MacroExp: MacroExp . ',' var_tok
+
+    var_tok   shift, and go to state 62
+    ret_tok   shift, and go to state 63
+    int_tok   shift, and go to state 64
+    mov_tok   shift, and go to state 65
+    cmp_tok   shift, and go to state 66
+    call_tok  shift, and go to state 67
+    push_tok  shift, and go to state 68
+    pop_tok   shift, and go to state 69
+    add_tok   shift, and go to state 70
+    sub_tok   shift, and go to state 71
+    inc_tok   shift, and go to state 72
+    dec_tok   shift, and go to state 73
+    mul_tok   shift, and go to state 74
+    div_tok   shift, and go to state 75
+    jmp_tok   shift, and go to state 76
+    jle_tok   shift, and go to state 77
+    jl_tok    shift, and go to state 78
+    jge_tok   shift, and go to state 79
+    jg_tok    shift, and go to state 80
+    je_tok    shift, and go to state 81
+    jne_tok   shift, and go to state 82
+    loop_tok  shift, and go to state 83
+    ','       shift, and go to state 84
+
+    Instruction  go to state 85
+    Int_ins      go to state 86
+    Mov_ins      go to state 87
+    Cmp_ins      go to state 88
+    Jmp_ins      go to state 89
+    Add_ins      go to state 90
+    Sub_ins      go to state 91
+    Mul_ins      go to state 92
+    Div_ins      go to state 93
+    Call_ins     go to state 94
+    Push_ins     go to state 95
+    Pop_ins      go to state 96
+    Ret_ins      go to state 97
+    Block        go to state 98
+    BlockItem    go to state 99
+
+
+state 52
+
+  133 Block: var_tok ':' @4 . BlockItem
+
+    var_tok   shift, and go to state 62
+    ret_tok   shift, and go to state 63
+    int_tok   shift, and go to state 64
+    mov_tok   shift, and go to state 65
+    cmp_tok   shift, and go to state 66
+    call_tok  shift, and go to state 67
+    push_tok  shift, and go to state 68
+    pop_tok   shift, and go to state 69
+    add_tok   shift, and go to state 70
+    sub_tok   shift, and go to state 71
+    inc_tok   shift, and go to state 72
+    dec_tok   shift, and go to state 73
+    mul_tok   shift, and go to state 74
+    div_tok   shift, and go to state 75
+    jmp_tok   shift, and go to state 76
+    jle_tok   shift, and go to state 77
+    jl_tok    shift, and go to state 78
+    jge_tok   shift, and go to state 79
+    jg_tok    shift, and go to state 80
+    je_tok    shift, and go to state 81
+    jne_tok   shift, and go to state 82
+    loop_tok  shift, and go to state 83
+
+    Instruction  go to state 85
+    Int_ins      go to state 86
+    Mov_ins      go to state 87
+    Cmp_ins      go to state 88
+    Jmp_ins      go to state 89
+    Add_ins      go to state 90
+    Sub_ins      go to state 91
+    Mul_ins      go to state 92
+    Div_ins      go to state 93
+    Call_ins     go to state 94
+    Push_ins     go to state 95
+    Pop_ins      go to state 96
+    Ret_ins      go to state 97
+    Block        go to state 98
+    BlockItem    go to state 100
+
+
+state 53
+
+   14 Segment: code_tok segment_tok Content code_tok ends_tok .
+
+    $default  reduce using rule 14 (Segment)
+
+
+state 54
+
+   22 AllocaLine: var_tok db_tok @1 . AllocaExpH
+
+    num_tok     shift, and go to state 101
+    string_tok  shift, and go to state 102
+
+    AllocaExpH  go to state 103
+    AllocaExp   go to state 104
+
+
+state 55
+
+   26 AllocaLine: var_tok dd_tok @3 . AllocaExpH
+
+    num_tok     shift, and go to state 101
+    string_tok  shift, and go to state 102
+
+    AllocaExpH  go to state 105
+    AllocaExp   go to state 104
+
+
+state 56
+
+   24 AllocaLine: var_tok dw_tok @2 . AllocaExpH
+
+    num_tok     shift, and go to state 101
+    string_tok  shift, and go to state 102
+
+    AllocaExpH  go to state 106
+    AllocaExp   go to state 104
+
+
+state 57
+
+   12 Segment: data_tok segment_tok Alloca data_tok ends_tok .
+
+    $default  reduce using rule 12 (Segment)
+
+
+state 58
+
+   13 Segment: stack_tok segment_tok Alloca stack_tok ends_tok .
+
+    $default  reduce using rule 13 (Segment)
+
+
+state 59
+
+    9 Assume: Assume ',' cs_tok ':' code_tok .
+
+    $default  reduce using rule 9 (Assume)
+
+
+state 60
+
+   11 Assume: Assume ',' ss_tok ':' stack_tok .
+
+    $default  reduce using rule 11 (Assume)
+
+
+state 61
+
+   10 Assume: Assume ',' ds_tok ':' data_tok .
+
+    $default  reduce using rule 10 (Assume)
+
+
+state 62
+
+  133 Block: var_tok . ':' @4 BlockItem
+  134      | var_tok . ':'
+
+    ':'  shift, and go to state 37
+
+
+state 63
+
+  131 Ret_ins: ret_tok .
+
+    $default  reduce using rule 131 (Ret_ins)
+
+
+state 64
+
+   93 Int_ins: int_tok . num_tok
+
+    num_tok  shift, and go to state 107
+
+
+state 65
+
+   94 Mov_ins: mov_tok . DoubleOE
+   95        | mov_tok . DoubleOS
+
+    var_tok     shift, and go to state 108
+    ss_tok      shift, and go to state 109
+    sp_tok      shift, and go to state 110
+    ds_tok      shift, and go to state 111
+    code_tok    shift, and go to state 112
+    data_tok    shift, and go to state 113
+    stack_tok   shift, and go to state 114
+    ax_tok      shift, and go to state 115
+    ah_tok      shift, and go to state 116
+    al_tok      shift, and go to state 117
+    bx_tok      shift, and go to state 118
+    bh_tok      shift, and go to state 119
+    bl_tok      shift, and go to state 120
+    cx_tok      shift, and go to state 121
+    ch_tok      shift, and go to state 122
+    cl_tok      shift, and go to state 123
+    dx_tok      shift, and go to state 124
+    dh_tok      shift, and go to state 125
+    dl_tok      shift, and go to state 126
+    si_tok      shift, and go to state 127
+    di_tok      shift, and go to state 128
+    offset_tok  shift, and go to state 129
+    byte_tok    shift, and go to state 130
+    word_tok    shift, and go to state 131
+    '['         shift, and go to state 132
+
+    RegS        go to state 133
+    RegE        go to state 134
+    MemAddr     go to state 135
+    MemAddrExp  go to state 136
+    DoubleOE    go to state 137
+    DoubleOS    go to state 138
+
+
+state 66
+
+   96 Cmp_ins: cmp_tok . DoubleOE
+   97        | cmp_tok . DoubleOS
+
+    var_tok     shift, and go to state 108
+    ss_tok      shift, and go to state 109
+    sp_tok      shift, and go to state 110
+    ds_tok      shift, and go to state 111
+    code_tok    shift, and go to state 112
+    data_tok    shift, and go to state 113
+    stack_tok   shift, and go to state 114
+    ax_tok      shift, and go to state 115
+    ah_tok      shift, and go to state 116
+    al_tok      shift, and go to state 117
+    bx_tok      shift, and go to state 118
+    bh_tok      shift, and go to state 119
+    bl_tok      shift, and go to state 120
+    cx_tok      shift, and go to state 121
+    ch_tok      shift, and go to state 122
+    cl_tok      shift, and go to state 123
+    dx_tok      shift, and go to state 124
+    dh_tok      shift, and go to state 125
+    dl_tok      shift, and go to state 126
+    si_tok      shift, and go to state 127
+    di_tok      shift, and go to state 128
+    offset_tok  shift, and go to state 129
+    byte_tok    shift, and go to state 130
+    word_tok    shift, and go to state 131
+    '['         shift, and go to state 132
+
+    RegS        go to state 133
+    RegE        go to state 134
+    MemAddr     go to state 135
+    MemAddrExp  go to state 136
+    DoubleOE    go to state 139
+    DoubleOS    go to state 140
+
+
+state 67
+
+  126 Call_ins: call_tok . var_tok
+
+    var_tok  shift, and go to state 141
+
+
+state 68
+
+  127 Push_ins: push_tok . RegE
+  128         | push_tok . RegS
+
+    ss_tok      shift, and go to state 109
+    sp_tok      shift, and go to state 110
+    ds_tok      shift, and go to state 111
+    ax_tok      shift, and go to state 115
+    ah_tok      shift, and go to state 116
+    al_tok      shift, and go to state 117
+    bx_tok      shift, and go to state 118
+    bh_tok      shift, and go to state 119
+    bl_tok      shift, and go to state 120
+    cx_tok      shift, and go to state 121
+    ch_tok      shift, and go to state 122
+    cl_tok      shift, and go to state 123
+    dx_tok      shift, and go to state 124
+    dh_tok      shift, and go to state 125
+    dl_tok      shift, and go to state 126
+    si_tok      shift, and go to state 127
+    di_tok      shift, and go to state 128
+    offset_tok  shift, and go to state 129
+
+    RegS  go to state 142
+    RegE  go to state 143
+
+
+state 69
+
+  129 Pop_ins: pop_tok . RegE
+  130        | pop_tok . RegS
+
+    ss_tok      shift, and go to state 109
+    sp_tok      shift, and go to state 110
+    ds_tok      shift, and go to state 111
+    ax_tok      shift, and go to state 115
+    ah_tok      shift, and go to state 116
+    al_tok      shift, and go to state 117
+    bx_tok      shift, and go to state 118
+    bh_tok      shift, and go to state 119
+    bl_tok      shift, and go to state 120
+    cx_tok      shift, and go to state 121
+    ch_tok      shift, and go to state 122
+    cl_tok      shift, and go to state 123
+    dx_tok      shift, and go to state 124
+    dh_tok      shift, and go to state 125
+    dl_tok      shift, and go to state 126
+    si_tok      shift, and go to state 127
+    di_tok      shift, and go to state 128
+    offset_tok  shift, and go to state 129
+
+    RegS  go to state 144
+    RegE  go to state 145
+
+
+state 70
+
+  106 Add_ins: add_tok . DoubleOE
+  107        | add_tok . DoubleOS
+
+    var_tok     shift, and go to state 108
+    ss_tok      shift, and go to state 109
+    sp_tok      shift, and go to state 110
+    ds_tok      shift, and go to state 111
+    code_tok    shift, and go to state 112
+    data_tok    shift, and go to state 113
+    stack_tok   shift, and go to state 114
+    ax_tok      shift, and go to state 115
+    ah_tok      shift, and go to state 116
+    al_tok      shift, and go to state 117
+    bx_tok      shift, and go to state 118
+    bh_tok      shift, and go to state 119
+    bl_tok      shift, and go to state 120
+    cx_tok      shift, and go to state 121
+    ch_tok      shift, and go to state 122
+    cl_tok      shift, and go to state 123
+    dx_tok      shift, and go to state 124
+    dh_tok      shift, and go to state 125
+    dl_tok      shift, and go to state 126
+    si_tok      shift, and go to state 127
+    di_tok      shift, and go to state 128
+    offset_tok  shift, and go to state 129
+    byte_tok    shift, and go to state 130
+    word_tok    shift, and go to state 131
+    '['         shift, and go to state 132
+
+    RegS        go to state 133
+    RegE        go to state 134
+    MemAddr     go to state 135
+    MemAddrExp  go to state 136
+    DoubleOE    go to state 146
+    DoubleOS    go to state 147
+
+
+state 71
+
+  111 Sub_ins: sub_tok . DoubleOE
+  112        | sub_tok . DoubleOS
+
+    var_tok     shift, and go to state 108
+    ss_tok      shift, and go to state 109
+    sp_tok      shift, and go to state 110
+    ds_tok      shift, and go to state 111
+    code_tok    shift, and go to state 112
+    data_tok    shift, and go to state 113
+    stack_tok   shift, and go to state 114
+    ax_tok      shift, and go to state 115
+    ah_tok      shift, and go to state 116
+    al_tok      shift, and go to state 117
+    bx_tok      shift, and go to state 118
+    bh_tok      shift, and go to state 119
+    bl_tok      shift, and go to state 120
+    cx_tok      shift, and go to state 121
+    ch_tok      shift, and go to state 122
+    cl_tok      shift, and go to state 123
+    dx_tok      shift, and go to state 124
+    dh_tok      shift, and go to state 125
+    dl_tok      shift, and go to state 126
+    si_tok      shift, and go to state 127
+    di_tok      shift, and go to state 128
+    offset_tok  shift, and go to state 129
+    byte_tok    shift, and go to state 130
+    word_tok    shift, and go to state 131
+    '['         shift, and go to state 132
+
+    RegS        go to state 133
+    RegE        go to state 134
+    MemAddr     go to state 135
+    MemAddrExp  go to state 136
+    DoubleOE    go to state 148
+    DoubleOS    go to state 149
+
+
+state 72
+
+  108 Add_ins: inc_tok . RegE
+  109        | inc_tok . RegS
+  110        | inc_tok . MemAddr
+
+    var_tok     shift, and go to state 108
+    ss_tok      shift, and go to state 109
+    sp_tok      shift, and go to state 110
+    ds_tok      shift, and go to state 111
+    code_tok    shift, and go to state 112
+    data_tok    shift, and go to state 113
+    stack_tok   shift, and go to state 114
+    ax_tok      shift, and go to state 115
+    ah_tok      shift, and go to state 116
+    al_tok      shift, and go to state 117
+    bx_tok      shift, and go to state 118
+    bh_tok      shift, and go to state 119
+    bl_tok      shift, and go to state 120
+    cx_tok      shift, and go to state 121
+    ch_tok      shift, and go to state 122
+    cl_tok      shift, and go to state 123
+    dx_tok      shift, and go to state 124
+    dh_tok      shift, and go to state 125
+    dl_tok      shift, and go to state 126
+    si_tok      shift, and go to state 127
+    di_tok      shift, and go to state 128
+    offset_tok  shift, and go to state 129
+    '['         shift, and go to state 132
+
+    RegS        go to state 150
+    RegE        go to state 151
+    MemAddr     go to state 152
+    MemAddrExp  go to state 136
+
+
+state 73
+
+  113 Sub_ins: dec_tok . RegE
+  114        | dec_tok . RegS
+  115        | dec_tok . MemAddr
+
+    var_tok     shift, and go to state 108
+    ss_tok      shift, and go to state 109
+    sp_tok      shift, and go to state 110
+    ds_tok      shift, and go to state 111
+    code_tok    shift, and go to state 112
+    data_tok    shift, and go to state 113
+    stack_tok   shift, and go to state 114
+    ax_tok      shift, and go to state 115
+    ah_tok      shift, and go to state 116
+    al_tok      shift, and go to state 117
+    bx_tok      shift, and go to state 118
+    bh_tok      shift, and go to state 119
+    bl_tok      shift, and go to state 120
+    cx_tok      shift, and go to state 121
+    ch_tok      shift, and go to state 122
+    cl_tok      shift, and go to state 123
+    dx_tok      shift, and go to state 124
+    dh_tok      shift, and go to state 125
+    dl_tok      shift, and go to state 126
+    si_tok      shift, and go to state 127
+    di_tok      shift, and go to state 128
+    offset_tok  shift, and go to state 129
+    '['         shift, and go to state 132
+
+    RegS        go to state 153
+    RegE        go to state 154
+    MemAddr     go to state 155
+    MemAddrExp  go to state 136
+
+
+state 74
+
+  116 Mul_ins: mul_tok . RegE
+  117        | mul_tok . RegS
+  118        | mul_tok . MemAddr
+  119        | mul_tok . word_tok ptr_tok MemAddr
+  120        | mul_tok . byte_tok ptr_tok MemAddr
+
+    var_tok     shift, and go to state 108
+    ss_tok      shift, and go to state 109
+    sp_tok      shift, and go to state 110
+    ds_tok      shift, and go to state 111
+    code_tok    shift, and go to state 112
+    data_tok    shift, and go to state 113
+    stack_tok   shift, and go to state 114
+    ax_tok      shift, and go to state 115
+    ah_tok      shift, and go to state 116
+    al_tok      shift, and go to state 117
+    bx_tok      shift, and go to state 118
+    bh_tok      shift, and go to state 119
+    bl_tok      shift, and go to state 120
+    cx_tok      shift, and go to state 121
+    ch_tok      shift, and go to state 122
+    cl_tok      shift, and go to state 123
+    dx_tok      shift, and go to state 124
+    dh_tok      shift, and go to state 125
+    dl_tok      shift, and go to state 126
+    si_tok      shift, and go to state 127
+    di_tok      shift, and go to state 128
+    offset_tok  shift, and go to state 129
+    byte_tok    shift, and go to state 156
+    word_tok    shift, and go to state 157
+    '['         shift, and go to state 132
+
+    RegS        go to state 158
+    RegE        go to state 159
+    MemAddr     go to state 160
+    MemAddrExp  go to state 136
+
+
+state 75
+
+  121 Div_ins: div_tok . RegE
+  122        | div_tok . RegS
+  123        | div_tok . MemAddr
+  124        | div_tok . word_tok ptr_tok MemAddr
+  125        | div_tok . byte_tok ptr_tok MemAddr
+
+    var_tok     shift, and go to state 108
+    ss_tok      shift, and go to state 109
+    sp_tok      shift, and go to state 110
+    ds_tok      shift, and go to state 111
+    code_tok    shift, and go to state 112
+    data_tok    shift, and go to state 113
+    stack_tok   shift, and go to state 114
+    ax_tok      shift, and go to state 115
+    ah_tok      shift, and go to state 116
+    al_tok      shift, and go to state 117
+    bx_tok      shift, and go to state 118
+    bh_tok      shift, and go to state 119
+    bl_tok      shift, and go to state 120
+    cx_tok      shift, and go to state 121
+    ch_tok      shift, and go to state 122
+    cl_tok      shift, and go to state 123
+    dx_tok      shift, and go to state 124
+    dh_tok      shift, and go to state 125
+    dl_tok      shift, and go to state 126
+    si_tok      shift, and go to state 127
+    di_tok      shift, and go to state 128
+    offset_tok  shift, and go to state 129
+    byte_tok    shift, and go to state 161
+    word_tok    shift, and go to state 162
+    '['         shift, and go to state 132
+
+    RegS        go to state 163
+    RegE        go to state 164
+    MemAddr     go to state 165
+    MemAddrExp  go to state 136
+
+
+state 76
+
+   98 Jmp_ins: jmp_tok . var_tok
+
+    var_tok  shift, and go to state 166
+
+
+state 77
+
+   99 Jmp_ins: jle_tok . var_tok
+
+    var_tok  shift, and go to state 167
+
+
+state 78
+
+  100 Jmp_ins: jl_tok . var_tok
+
+    var_tok  shift, and go to state 168
+
+
+state 79
+
+  101 Jmp_ins: jge_tok . var_tok
+
+    var_tok  shift, and go to state 169
+
+
+state 80
+
+  102 Jmp_ins: jg_tok . var_tok
+
+    var_tok  shift, and go to state 170
+
+
+state 81
+
+  103 Jmp_ins: je_tok . var_tok
+
+    var_tok  shift, and go to state 171
+
+
+state 82
+
+  104 Jmp_ins: jne_tok . var_tok
+
+    var_tok  shift, and go to state 172
+
+
+state 83
+
+  105 Jmp_ins: loop_tok . var_tok
+
+    var_tok  shift, and go to state 173
+
+
+state 84
+
+  139 MacroExp: MacroExp ',' . var_tok
+
+    var_tok  shift, and go to state 174
+
+
+state 85
+
+  135 BlockItem: Instruction .
+
+    $default  reduce using rule 135 (BlockItem)
+
+
+state 86
+
+   80 Instruction: Int_ins .
+
+    $default  reduce using rule 80 (Instruction)
+
+
+state 87
+
+   81 Instruction: Mov_ins .
+
+    $default  reduce using rule 81 (Instruction)
+
+
+state 88
+
+   82 Instruction: Cmp_ins .
+
+    $default  reduce using rule 82 (Instruction)
+
+
+state 89
+
+   83 Instruction: Jmp_ins .
+
+    $default  reduce using rule 83 (Instruction)
+
+
+state 90
+
+   84 Instruction: Add_ins .
+
+    $default  reduce using rule 84 (Instruction)
+
+
+state 91
+
+   85 Instruction: Sub_ins .
+
+    $default  reduce using rule 85 (Instruction)
+
+
+state 92
+
+   86 Instruction: Mul_ins .
+
+    $default  reduce using rule 86 (Instruction)
+
+
+state 93
+
+   87 Instruction: Div_ins .
+
+    $default  reduce using rule 87 (Instruction)
+
+
+state 94
+
+   88 Instruction: Call_ins .
+
+    $default  reduce using rule 88 (Instruction)
+
+
+state 95
+
+   89 Instruction: Push_ins .
+
+    $default  reduce using rule 89 (Instruction)
+
+
+state 96
+
+   90 Instruction: Pop_ins .
+
+    $default  reduce using rule 90 (Instruction)
+
+
+state 97
+
+   91 Instruction: Ret_ins .
+
+    $default  reduce using rule 91 (Instruction)
+
+
+state 98
+
+   92 Instruction: Block .
+
+    $default  reduce using rule 92 (Instruction)
+
+
+state 99
+
+  136 BlockItem: BlockItem . Instruction
+  137 Macro: var_tok macro_tok MacroExp BlockItem . endm_tok
+
+    var_tok   shift, and go to state 62
+    endm_tok  shift, and go to state 175
+    ret_tok   shift, and go to state 63
+    int_tok   shift, and go to state 64
+    mov_tok   shift, and go to state 65
+    cmp_tok   shift, and go to state 66
+    call_tok  shift, and go to state 67
+    push_tok  shift, and go to state 68
+    pop_tok   shift, and go to state 69
+    add_tok   shift, and go to state 70
+    sub_tok   shift, and go to state 71
+    inc_tok   shift, and go to state 72
+    dec_tok   shift, and go to state 73
+    mul_tok   shift, and go to state 74
+    div_tok   shift, and go to state 75
+    jmp_tok   shift, and go to state 76
+    jle_tok   shift, and go to state 77
+    jl_tok    shift, and go to state 78
+    jge_tok   shift, and go to state 79
+    jg_tok    shift, and go to state 80
+    je_tok    shift, and go to state 81
+    jne_tok   shift, and go to state 82
+    loop_tok  shift, and go to state 83
+
+    Instruction  go to state 176
+    Int_ins      go to state 86
+    Mov_ins      go to state 87
+    Cmp_ins      go to state 88
+    Jmp_ins      go to state 89
+    Add_ins      go to state 90
+    Sub_ins      go to state 91
+    Mul_ins      go to state 92
+    Div_ins      go to state 93
+    Call_ins     go to state 94
+    Push_ins     go to state 95
+    Pop_ins      go to state 96
+    Ret_ins      go to state 97
+    Block        go to state 98
+
+
+state 100
+
+  133 Block: var_tok ':' @4 BlockItem .
+  136 BlockItem: BlockItem . Instruction
+
+    var_tok   shift, and go to state 62
+    ret_tok   shift, and go to state 63
+    int_tok   shift, and go to state 64
+    mov_tok   shift, and go to state 65
+    cmp_tok   shift, and go to state 66
+    call_tok  shift, and go to state 67
+    push_tok  shift, and go to state 68
+    pop_tok   shift, and go to state 69
+    add_tok   shift, and go to state 70
+    sub_tok   shift, and go to state 71
+    inc_tok   shift, and go to state 72
+    dec_tok   shift, and go to state 73
+    mul_tok   shift, and go to state 74
+    div_tok   shift, and go to state 75
+    jmp_tok   shift, and go to state 76
+    jle_tok   shift, and go to state 77
+    jl_tok    shift, and go to state 78
+    jge_tok   shift, and go to state 79
+    jg_tok    shift, and go to state 80
+    je_tok    shift, and go to state 81
+    jne_tok   shift, and go to state 82
+    loop_tok  shift, and go to state 83
+
+    var_tok   [reduce using rule 133 (Block)]
+    ret_tok   [reduce using rule 133 (Block)]
+    int_tok   [reduce using rule 133 (Block)]
+    mov_tok   [reduce using rule 133 (Block)]
+    cmp_tok   [reduce using rule 133 (Block)]
+    call_tok  [reduce using rule 133 (Block)]
+    push_tok  [reduce using rule 133 (Block)]
+    pop_tok   [reduce using rule 133 (Block)]
+    add_tok   [reduce using rule 133 (Block)]
+    sub_tok   [reduce using rule 133 (Block)]
+    inc_tok   [reduce using rule 133 (Block)]
+    dec_tok   [reduce using rule 133 (Block)]
+    mul_tok   [reduce using rule 133 (Block)]
+    div_tok   [reduce using rule 133 (Block)]
+    jmp_tok   [reduce using rule 133 (Block)]
+    jle_tok   [reduce using rule 133 (Block)]
+    jl_tok    [reduce using rule 133 (Block)]
+    jge_tok   [reduce using rule 133 (Block)]
+    jg_tok    [reduce using rule 133 (Block)]
+    je_tok    [reduce using rule 133 (Block)]
+    jne_tok   [reduce using rule 133 (Block)]
+    loop_tok  [reduce using rule 133 (Block)]
+    $default  reduce using rule 133 (Block)
+
+    Instruction  go to state 176
+    Int_ins      go to state 86
+    Mov_ins      go to state 87
+    Cmp_ins      go to state 88
+    Jmp_ins      go to state 89
+    Add_ins      go to state 90
+    Sub_ins      go to state 91
+    Mul_ins      go to state 92
+    Div_ins      go to state 93
+    Call_ins     go to state 94
+    Push_ins     go to state 95
+    Pop_ins      go to state 96
+    Ret_ins      go to state 97
+    Block        go to state 98
+
+
+state 101
+
+   30 AllocaExp: num_tok .
+   31          | num_tok . dup_tok '(' num_tok ')'
+
+    dup_tok  shift, and go to state 177
+
+    $default  reduce using rule 30 (AllocaExp)
+
+
+state 102
+
+   29 AllocaExp: string_tok .
+
+    $default  reduce using rule 29 (AllocaExp)
+
+
+state 103
+
+   22 AllocaLine: var_tok db_tok @1 AllocaExpH .
+   28 AllocaExpH: AllocaExpH . ',' AllocaExp
+
+    ','  shift, and go to state 178
+
+    $default  reduce using rule 22 (AllocaLine)
+
+
+state 104
+
+   27 AllocaExpH: AllocaExp .
+
+    $default  reduce using rule 27 (AllocaExpH)
+
+
+state 105
+
+   26 AllocaLine: var_tok dd_tok @3 AllocaExpH .
+   28 AllocaExpH: AllocaExpH . ',' AllocaExp
+
+    ','  shift, and go to state 178
+
+    $default  reduce using rule 26 (AllocaLine)
+
+
+state 106
+
+   24 AllocaLine: var_tok dw_tok @2 AllocaExpH .
+   28 AllocaExpH: AllocaExpH . ',' AllocaExp
+
+    ','  shift, and go to state 178
+
+    $default  reduce using rule 24 (AllocaLine)
+
+
+state 107
+
+   93 Int_ins: int_tok num_tok .
+
+    $default  reduce using rule 93 (Int_ins)
+
+
+state 108
+
+   50 MemAddr: var_tok .
+
+    $default  reduce using rule 50 (MemAddr)
+
+
+state 109
+
+   39 RegS: ss_tok .
+
+    $default  reduce using rule 39 (RegS)
+
+
+state 110
+
+   40 RegS: sp_tok .
+
+    $default  reduce using rule 40 (RegS)
+
+
+state 111
+
+   38 RegS: ds_tok .
+
+    $default  reduce using rule 38 (RegS)
+
+
+state 112
+
+   53 MemAddr: code_tok .
+
+    $default  reduce using rule 53 (MemAddr)
+
+
+state 113
+
+   51 MemAddr: data_tok .
+
+    $default  reduce using rule 51 (MemAddr)
+
+
+state 114
+
+   52 MemAddr: stack_tok .
+
+    $default  reduce using rule 52 (MemAddr)
+
+
+state 115
+
+   32 RegS: ax_tok .
+
+    $default  reduce using rule 32 (RegS)
+
+
+state 116
+
+   42 RegE: ah_tok .
+
+    $default  reduce using rule 42 (RegE)
+
+
+state 117
+
+   43 RegE: al_tok .
+
+    $default  reduce using rule 43 (RegE)
+
+
+state 118
+
+   33 RegS: bx_tok .
+
+    $default  reduce using rule 33 (RegS)
+
+
+state 119
+
+   44 RegE: bh_tok .
+
+    $default  reduce using rule 44 (RegE)
+
+
+state 120
+
+   45 RegE: bl_tok .
+
+    $default  reduce using rule 45 (RegE)
+
+
+state 121
+
+   34 RegS: cx_tok .
+
+    $default  reduce using rule 34 (RegS)
+
+
+state 122
+
+   46 RegE: ch_tok .
+
+    $default  reduce using rule 46 (RegE)
+
+
+state 123
+
+   47 RegE: cl_tok .
+
+    $default  reduce using rule 47 (RegE)
+
+
+state 124
+
+   35 RegS: dx_tok .
+
+    $default  reduce using rule 35 (RegS)
+
+
+state 125
+
+   48 RegE: dh_tok .
+
+    $default  reduce using rule 48 (RegE)
+
+
+state 126
+
+   49 RegE: dl_tok .
+
+    $default  reduce using rule 49 (RegE)
+
+
+state 127
+
+   36 RegS: si_tok .
+
+    $default  reduce using rule 36 (RegS)
+
+
+state 128
+
+   37 RegS: di_tok .
+
+    $default  reduce using rule 37 (RegS)
+
+
+state 129
+
+   41 RegS: offset_tok . var_tok
+
+    var_tok  shift, and go to state 179
+
+
+state 130
+
+   72 DoubleOE: byte_tok . ptr_tok MemAddr ',' MemAddr
+   73         | byte_tok . ptr_tok MemAddr ',' num_tok
+
+    ptr_tok  shift, and go to state 180
+
+
+state 131
+
+   78 DoubleOS: word_tok . ptr_tok MemAddr ',' MemAddr
+   79         | word_tok . ptr_tok MemAddr ',' num_tok
+
+    ptr_tok  shift, and go to state 181
+
+
+state 132
+
+   55 MemAddrExp: '[' . num_tok ']'
+   56           | '[' . MemAddrExp_a ']'
+   57           | '[' . MemAddrExp_a '+' MemAddrExp_a ']'
+   58           | '[' . MemAddrExp_a num_tok ']'
+   59           | '[' . MemAddrExp_a '+' MemAddrExp_a num_tok ']'
+
+    num_tok  shift, and go to state 182
+    ax_tok   shift, and go to state 183
+    bx_tok   shift, and go to state 184
+    cx_tok   shift, and go to state 185
+    dx_tok   shift, and go to state 186
+    si_tok   shift, and go to state 187
+    di_tok   shift, and go to state 188
+
+    MemAddrExp_a  go to state 189
+
+
+state 133
+
+   74 DoubleOS: RegS . ',' RegS
+   75         | RegS . ',' num_tok
+   76         | RegS . ',' MemAddr
+
+    ','  shift, and go to state 190
+
+
+state 134
+
+   66 DoubleOE: RegE . ',' RegE
+   67         | RegE . ',' num_tok
+   68         | RegE . ',' MemAddr
+
+    ','  shift, and go to state 191
+
+
+state 135
+
+   69 DoubleOE: MemAddr . ',' RegE
+   70         | MemAddr . ',' num_tok
+   71         | MemAddr . ',' MemAddr
+   77 DoubleOS: MemAddr . ',' RegS
+
+    ','  shift, and go to state 192
+
+
+state 136
+
+   54 MemAddr: MemAddrExp .
+
+    $default  reduce using rule 54 (MemAddr)
+
+
+state 137
+
+   94 Mov_ins: mov_tok DoubleOE .
+
+    $default  reduce using rule 94 (Mov_ins)
+
+
+state 138
+
+   95 Mov_ins: mov_tok DoubleOS .
+
+    $default  reduce using rule 95 (Mov_ins)
+
+
+state 139
+
+   96 Cmp_ins: cmp_tok DoubleOE .
+
+    $default  reduce using rule 96 (Cmp_ins)
+
+
+state 140
+
+   97 Cmp_ins: cmp_tok DoubleOS .
+
+    $default  reduce using rule 97 (Cmp_ins)
+
+
+state 141
+
+  126 Call_ins: call_tok var_tok .
+
+    $default  reduce using rule 126 (Call_ins)
+
+
+state 142
+
+  128 Push_ins: push_tok RegS .
+
+    $default  reduce using rule 128 (Push_ins)
+
+
+state 143
+
+  127 Push_ins: push_tok RegE .
+
+    $default  reduce using rule 127 (Push_ins)
+
+
+state 144
+
+  130 Pop_ins: pop_tok RegS .
+
+    $default  reduce using rule 130 (Pop_ins)
+
+
+state 145
+
+  129 Pop_ins: pop_tok RegE .
+
+    $default  reduce using rule 129 (Pop_ins)
+
+
+state 146
+
+  106 Add_ins: add_tok DoubleOE .
+
+    $default  reduce using rule 106 (Add_ins)
+
+
+state 147
+
+  107 Add_ins: add_tok DoubleOS .
+
+    $default  reduce using rule 107 (Add_ins)
+
+
+state 148
+
+  111 Sub_ins: sub_tok DoubleOE .
+
+    $default  reduce using rule 111 (Sub_ins)
+
+
+state 149
+
+  112 Sub_ins: sub_tok DoubleOS .
+
+    $default  reduce using rule 112 (Sub_ins)
+
+
+state 150
+
+  109 Add_ins: inc_tok RegS .
+
+    $default  reduce using rule 109 (Add_ins)
+
+
+state 151
+
+  108 Add_ins: inc_tok RegE .
+
+    $default  reduce using rule 108 (Add_ins)
+
+
+state 152
+
+  110 Add_ins: inc_tok MemAddr .
+
+    $default  reduce using rule 110 (Add_ins)
+
+
+state 153
+
+  114 Sub_ins: dec_tok RegS .
+
+    $default  reduce using rule 114 (Sub_ins)
+
+
+state 154
+
+  113 Sub_ins: dec_tok RegE .
+
+    $default  reduce using rule 113 (Sub_ins)
+
+
+state 155
+
+  115 Sub_ins: dec_tok MemAddr .
+
+    $default  reduce using rule 115 (Sub_ins)
+
+
+state 156
+
+  120 Mul_ins: mul_tok byte_tok . ptr_tok MemAddr
+
+    ptr_tok  shift, and go to state 193
+
+
+state 157
+
+  119 Mul_ins: mul_tok word_tok . ptr_tok MemAddr
+
+    ptr_tok  shift, and go to state 194
+
+
+state 158
+
+  117 Mul_ins: mul_tok RegS .
+
+    $default  reduce using rule 117 (Mul_ins)
+
+
+state 159
+
+  116 Mul_ins: mul_tok RegE .
+
+    $default  reduce using rule 116 (Mul_ins)
+
+
+state 160
+
+  118 Mul_ins: mul_tok MemAddr .
+
+    $default  reduce using rule 118 (Mul_ins)
+
+
+state 161
+
+  125 Div_ins: div_tok byte_tok . ptr_tok MemAddr
+
+    ptr_tok  shift, and go to state 195
+
+
+state 162
+
+  124 Div_ins: div_tok word_tok . ptr_tok MemAddr
+
+    ptr_tok  shift, and go to state 196
+
+
+state 163
+
+  122 Div_ins: div_tok RegS .
+
+    $default  reduce using rule 122 (Div_ins)
+
+
+state 164
+
+  121 Div_ins: div_tok RegE .
+
+    $default  reduce using rule 121 (Div_ins)
+
+
+state 165
+
+  123 Div_ins: div_tok MemAddr .
+
+    $default  reduce using rule 123 (Div_ins)
+
+
+state 166
+
+   98 Jmp_ins: jmp_tok var_tok .
+
+    $default  reduce using rule 98 (Jmp_ins)
+
+
+state 167
+
+   99 Jmp_ins: jle_tok var_tok .
+
+    $default  reduce using rule 99 (Jmp_ins)
+
+
+state 168
+
+  100 Jmp_ins: jl_tok var_tok .
+
+    $default  reduce using rule 100 (Jmp_ins)
+
+
+state 169
+
+  101 Jmp_ins: jge_tok var_tok .
+
+    $default  reduce using rule 101 (Jmp_ins)
+
+
+state 170
+
+  102 Jmp_ins: jg_tok var_tok .
+
+    $default  reduce using rule 102 (Jmp_ins)
+
+
+state 171
+
+  103 Jmp_ins: je_tok var_tok .
+
+    $default  reduce using rule 103 (Jmp_ins)
+
+
+state 172
+
+  104 Jmp_ins: jne_tok var_tok .
+
+    $default  reduce using rule 104 (Jmp_ins)
+
+
+state 173
+
+  105 Jmp_ins: loop_tok var_tok .
+
+    $default  reduce using rule 105 (Jmp_ins)
+
+
+state 174
+
+  139 MacroExp: MacroExp ',' var_tok .
+
+    $default  reduce using rule 139 (MacroExp)
+
+
+state 175
+
+  137 Macro: var_tok macro_tok MacroExp BlockItem endm_tok .
+
+    $default  reduce using rule 137 (Macro)
+
+
+state 176
+
+  136 BlockItem: BlockItem Instruction .
+
+    $default  reduce using rule 136 (BlockItem)
+
+
+state 177
+
+   31 AllocaExp: num_tok dup_tok . '(' num_tok ')'
+
+    '('  shift, and go to state 197
+
+
+state 178
+
+   28 AllocaExpH: AllocaExpH ',' . AllocaExp
+
+    num_tok     shift, and go to state 101
+    string_tok  shift, and go to state 102
+
+    AllocaExp  go to state 198
+
+
+state 179
+
+   41 RegS: offset_tok var_tok .
+
+    $default  reduce using rule 41 (RegS)
+
+
+state 180
+
+   72 DoubleOE: byte_tok ptr_tok . MemAddr ',' MemAddr
+   73         | byte_tok ptr_tok . MemAddr ',' num_tok
+
+    var_tok    shift, and go to state 108
+    code_tok   shift, and go to state 112
+    data_tok   shift, and go to state 113
+    stack_tok  shift, and go to state 114
+    '['        shift, and go to state 132
+
+    MemAddr     go to state 199
+    MemAddrExp  go to state 136
+
+
+state 181
+
+   78 DoubleOS: word_tok ptr_tok . MemAddr ',' MemAddr
+   79         | word_tok ptr_tok . MemAddr ',' num_tok
+
+    var_tok    shift, and go to state 108
+    code_tok   shift, and go to state 112
+    data_tok   shift, and go to state 113
+    stack_tok  shift, and go to state 114
+    '['        shift, and go to state 132
+
+    MemAddr     go to state 200
+    MemAddrExp  go to state 136
+
+
+state 182
+
+   55 MemAddrExp: '[' num_tok . ']'
+
+    ']'  shift, and go to state 201
+
+
+state 183
+
+   60 MemAddrExp_a: ax_tok .
+
+    $default  reduce using rule 60 (MemAddrExp_a)
+
+
+state 184
+
+   61 MemAddrExp_a: bx_tok .
+
+    $default  reduce using rule 61 (MemAddrExp_a)
+
+
+state 185
+
+   62 MemAddrExp_a: cx_tok .
+
+    $default  reduce using rule 62 (MemAddrExp_a)
+
+
+state 186
+
+   63 MemAddrExp_a: dx_tok .
+
+    $default  reduce using rule 63 (MemAddrExp_a)
+
+
+state 187
+
+   64 MemAddrExp_a: si_tok .
+
+    $default  reduce using rule 64 (MemAddrExp_a)
+
+
+state 188
+
+   65 MemAddrExp_a: di_tok .
+
+    $default  reduce using rule 65 (MemAddrExp_a)
+
+
+state 189
+
+   56 MemAddrExp: '[' MemAddrExp_a . ']'
+   57           | '[' MemAddrExp_a . '+' MemAddrExp_a ']'
+   58           | '[' MemAddrExp_a . num_tok ']'
+   59           | '[' MemAddrExp_a . '+' MemAddrExp_a num_tok ']'
+
+    num_tok  shift, and go to state 202
+    ']'      shift, and go to state 203
+    '+'      shift, and go to state 204
+
+
+state 190
+
+   74 DoubleOS: RegS ',' . RegS
+   75         | RegS ',' . num_tok
+   76         | RegS ',' . MemAddr
+
+    var_tok     shift, and go to state 108
+    num_tok     shift, and go to state 205
+    ss_tok      shift, and go to state 109
+    sp_tok      shift, and go to state 110
+    ds_tok      shift, and go to state 111
+    code_tok    shift, and go to state 112
+    data_tok    shift, and go to state 113
+    stack_tok   shift, and go to state 114
+    ax_tok      shift, and go to state 115
+    bx_tok      shift, and go to state 118
+    cx_tok      shift, and go to state 121
+    dx_tok      shift, and go to state 124
+    si_tok      shift, and go to state 127
+    di_tok      shift, and go to state 128
+    offset_tok  shift, and go to state 129
+    '['         shift, and go to state 132
+
+    RegS        go to state 206
+    MemAddr     go to state 207
+    MemAddrExp  go to state 136
+
+
+state 191
+
+   66 DoubleOE: RegE ',' . RegE
+   67         | RegE ',' . num_tok
+   68         | RegE ',' . MemAddr
+
+    var_tok    shift, and go to state 108
+    num_tok    shift, and go to state 208
+    code_tok   shift, and go to state 112
+    data_tok   shift, and go to state 113
+    stack_tok  shift, and go to state 114
+    ah_tok     shift, and go to state 116
+    al_tok     shift, and go to state 117
+    bh_tok     shift, and go to state 119
+    bl_tok     shift, and go to state 120
+    ch_tok     shift, and go to state 122
+    cl_tok     shift, and go to state 123
+    dh_tok     shift, and go to state 125
+    dl_tok     shift, and go to state 126
+    '['        shift, and go to state 132
+
+    RegE        go to state 209
+    MemAddr     go to state 210
+    MemAddrExp  go to state 136
+
+
+state 192
+
+   69 DoubleOE: MemAddr ',' . RegE
+   70         | MemAddr ',' . num_tok
+   71         | MemAddr ',' . MemAddr
+   77 DoubleOS: MemAddr ',' . RegS
+
+    var_tok     shift, and go to state 108
+    num_tok     shift, and go to state 211
+    ss_tok      shift, and go to state 109
+    sp_tok      shift, and go to state 110
+    ds_tok      shift, and go to state 111
+    code_tok    shift, and go to state 112
+    data_tok    shift, and go to state 113
+    stack_tok   shift, and go to state 114
+    ax_tok      shift, and go to state 115
+    ah_tok      shift, and go to state 116
+    al_tok      shift, and go to state 117
+    bx_tok      shift, and go to state 118
+    bh_tok      shift, and go to state 119
+    bl_tok      shift, and go to state 120
+    cx_tok      shift, and go to state 121
+    ch_tok      shift, and go to state 122
+    cl_tok      shift, and go to state 123
+    dx_tok      shift, and go to state 124
+    dh_tok      shift, and go to state 125
+    dl_tok      shift, and go to state 126
+    si_tok      shift, and go to state 127
+    di_tok      shift, and go to state 128
+    offset_tok  shift, and go to state 129
+    '['         shift, and go to state 132
+
+    RegS        go to state 212
+    RegE        go to state 213
+    MemAddr     go to state 214
+    MemAddrExp  go to state 136
+
+
+state 193
+
+  120 Mul_ins: mul_tok byte_tok ptr_tok . MemAddr
+
+    var_tok    shift, and go to state 108
+    code_tok   shift, and go to state 112
+    data_tok   shift, and go to state 113
+    stack_tok  shift, and go to state 114
+    '['        shift, and go to state 132
+
+    MemAddr     go to state 215
+    MemAddrExp  go to state 136
+
+
+state 194
+
+  119 Mul_ins: mul_tok word_tok ptr_tok . MemAddr
+
+    var_tok    shift, and go to state 108
+    code_tok   shift, and go to state 112
+    data_tok   shift, and go to state 113
+    stack_tok  shift, and go to state 114
+    '['        shift, and go to state 132
+
+    MemAddr     go to state 216
+    MemAddrExp  go to state 136
+
+
+state 195
+
+  125 Div_ins: div_tok byte_tok ptr_tok . MemAddr
+
+    var_tok    shift, and go to state 108
+    code_tok   shift, and go to state 112
+    data_tok   shift, and go to state 113
+    stack_tok  shift, and go to state 114
+    '['        shift, and go to state 132
+
+    MemAddr     go to state 217
+    MemAddrExp  go to state 136
+
+
+state 196
+
+  124 Div_ins: div_tok word_tok ptr_tok . MemAddr
+
+    var_tok    shift, and go to state 108
+    code_tok   shift, and go to state 112
+    data_tok   shift, and go to state 113
+    stack_tok  shift, and go to state 114
+    '['        shift, and go to state 132
+
+    MemAddr     go to state 218
+    MemAddrExp  go to state 136
+
+
+state 197
+
+   31 AllocaExp: num_tok dup_tok '(' . num_tok ')'
+
+    num_tok  shift, and go to state 219
+
+
+state 198
+
+   28 AllocaExpH: AllocaExpH ',' AllocaExp .
+
+    $default  reduce using rule 28 (AllocaExpH)
+
+
+state 199
+
+   72 DoubleOE: byte_tok ptr_tok MemAddr . ',' MemAddr
+   73         | byte_tok ptr_tok MemAddr . ',' num_tok
+
+    ','  shift, and go to state 220
+
+
+state 200
+
+   78 DoubleOS: word_tok ptr_tok MemAddr . ',' MemAddr
+   79         | word_tok ptr_tok MemAddr . ',' num_tok
+
+    ','  shift, and go to state 221
+
+
+state 201
+
+   55 MemAddrExp: '[' num_tok ']' .
+
+    $default  reduce using rule 55 (MemAddrExp)
+
+
+state 202
+
+   58 MemAddrExp: '[' MemAddrExp_a num_tok . ']'
+
+    ']'  shift, and go to state 222
+
+
+state 203
+
+   56 MemAddrExp: '[' MemAddrExp_a ']' .
+
+    $default  reduce using rule 56 (MemAddrExp)
+
+
+state 204
+
+   57 MemAddrExp: '[' MemAddrExp_a '+' . MemAddrExp_a ']'
+   59           | '[' MemAddrExp_a '+' . MemAddrExp_a num_tok ']'
+
+    ax_tok  shift, and go to state 183
+    bx_tok  shift, and go to state 184
+    cx_tok  shift, and go to state 185
+    dx_tok  shift, and go to state 186
+    si_tok  shift, and go to state 187
+    di_tok  shift, and go to state 188
+
+    MemAddrExp_a  go to state 223
+
+
+state 205
+
+   75 DoubleOS: RegS ',' num_tok .
+
+    $default  reduce using rule 75 (DoubleOS)
+
+
+state 206
+
+   74 DoubleOS: RegS ',' RegS .
+
+    $default  reduce using rule 74 (DoubleOS)
+
+
+state 207
+
+   76 DoubleOS: RegS ',' MemAddr .
+
+    $default  reduce using rule 76 (DoubleOS)
+
+
+state 208
+
+   67 DoubleOE: RegE ',' num_tok .
+
+    $default  reduce using rule 67 (DoubleOE)
+
+
+state 209
+
+   66 DoubleOE: RegE ',' RegE .
+
+    $default  reduce using rule 66 (DoubleOE)
+
+
+state 210
+
+   68 DoubleOE: RegE ',' MemAddr .
+
+    $default  reduce using rule 68 (DoubleOE)
+
+
+state 211
+
+   70 DoubleOE: MemAddr ',' num_tok .
+
+    $default  reduce using rule 70 (DoubleOE)
+
+
+state 212
+
+   77 DoubleOS: MemAddr ',' RegS .
+
+    $default  reduce using rule 77 (DoubleOS)
+
+
+state 213
+
+   69 DoubleOE: MemAddr ',' RegE .
+
+    $default  reduce using rule 69 (DoubleOE)
+
+
+state 214
+
+   71 DoubleOE: MemAddr ',' MemAddr .
+
+    $default  reduce using rule 71 (DoubleOE)
+
+
+state 215
+
+  120 Mul_ins: mul_tok byte_tok ptr_tok MemAddr .
+
+    $default  reduce using rule 120 (Mul_ins)
+
+
+state 216
+
+  119 Mul_ins: mul_tok word_tok ptr_tok MemAddr .
+
+    $default  reduce using rule 119 (Mul_ins)
+
+
+state 217
+
+  125 Div_ins: div_tok byte_tok ptr_tok MemAddr .
+
+    $default  reduce using rule 125 (Div_ins)
+
+
+state 218
+
+  124 Div_ins: div_tok word_tok ptr_tok MemAddr .
+
+    $default  reduce using rule 124 (Div_ins)
+
+
+state 219
+
+   31 AllocaExp: num_tok dup_tok '(' num_tok . ')'
+
+    ')'  shift, and go to state 224
+
+
+state 220
+
+   72 DoubleOE: byte_tok ptr_tok MemAddr ',' . MemAddr
+   73         | byte_tok ptr_tok MemAddr ',' . num_tok
+
+    var_tok    shift, and go to state 108
+    num_tok    shift, and go to state 225
+    code_tok   shift, and go to state 112
+    data_tok   shift, and go to state 113
+    stack_tok  shift, and go to state 114
+    '['        shift, and go to state 132
+
+    MemAddr     go to state 226
+    MemAddrExp  go to state 136
+
+
+state 221
+
+   78 DoubleOS: word_tok ptr_tok MemAddr ',' . MemAddr
+   79         | word_tok ptr_tok MemAddr ',' . num_tok
+
+    var_tok    shift, and go to state 108
+    num_tok    shift, and go to state 227
+    code_tok   shift, and go to state 112
+    data_tok   shift, and go to state 113
+    stack_tok  shift, and go to state 114
+    '['        shift, and go to state 132
+
+    MemAddr     go to state 228
+    MemAddrExp  go to state 136
+
+
+state 222
+
+   58 MemAddrExp: '[' MemAddrExp_a num_tok ']' .
+
+    $default  reduce using rule 58 (MemAddrExp)
+
+
+state 223
+
+   57 MemAddrExp: '[' MemAddrExp_a '+' MemAddrExp_a . ']'
+   59           | '[' MemAddrExp_a '+' MemAddrExp_a . num_tok ']'
+
+    num_tok  shift, and go to state 229
+    ']'      shift, and go to state 230
+
+
+state 224
+
+   31 AllocaExp: num_tok dup_tok '(' num_tok ')' .
+
+    $default  reduce using rule 31 (AllocaExp)
+
+
+state 225
+
+   73 DoubleOE: byte_tok ptr_tok MemAddr ',' num_tok .
+
+    $default  reduce using rule 73 (DoubleOE)
+
+
+state 226
+
+   72 DoubleOE: byte_tok ptr_tok MemAddr ',' MemAddr .
+
+    $default  reduce using rule 72 (DoubleOE)
+
+
+state 227
+
+   79 DoubleOS: word_tok ptr_tok MemAddr ',' num_tok .
+
+    $default  reduce using rule 79 (DoubleOS)
+
+
+state 228
+
+   78 DoubleOS: word_tok ptr_tok MemAddr ',' MemAddr .
+
+    $default  reduce using rule 78 (DoubleOS)
+
+
+state 229
+
+   59 MemAddrExp: '[' MemAddrExp_a '+' MemAddrExp_a num_tok . ']'
+
+    ']'  shift, and go to state 231
+
+
+state 230
+
+   57 MemAddrExp: '[' MemAddrExp_a '+' MemAddrExp_a ']' .
+
+    $default  reduce using rule 57 (MemAddrExp)
+
+
+state 231
+
+   59 MemAddrExp: '[' MemAddrExp_a '+' MemAddrExp_a num_tok ']' .
+
+    $default  reduce using rule 59 (MemAddrExp)

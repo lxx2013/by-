@@ -1,0 +1,15 @@
+0.PreBuild
+	需要安装clang编译器，dot工具，flex和bison工具
+	编译前请在makefile头部修改对应的指令
+1.Build:
+	$ make
+	
+
+2.Demo:
+	$ ./bin/parser -d asgn.dot test/right.asm
+	$ ./bin/trans.sh
+
+
+
+========
+Author: LiXinxing ( lxx2013@mail.ustc.edu.cn / 690154577@qq.com)

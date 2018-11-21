@@ -1,0 +1,11 @@
+Build:
+	$ make
+	$ ./bin/parser -d asgn.dot test/right.asm
+	$ ./bin/trans.sh
+
+
+
+
+
+========
+Author: LiXinxing ( lxx2013@mail.ustc.edu.cn / 690154577@qq.com)

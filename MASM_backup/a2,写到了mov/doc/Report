@@ -1,0 +1,48 @@
+注：这篇文档是我在凌晨1点编辑的，先把主要部分说明一下，以后有机会再补充
+1.符号表
+	我为CodeDOT类创建了5个符号表，如下
+    	map<string,int>  NameTable;             局部变量符号表,返回%寄存器的number
+    	map<string,int>  GlobalTable;		全局变量符号表,返回@后面紧跟的name
+    	map<string,int>  FuncTable;		函数符号表，检查call的函数名是否在内部定义
+    	map<string,int>  ArrayTable;		局部数组符号表
+    	map<string,int> GArrayTable;		全局数组符号表
+2.我的常量全部按照变量来处理了
+3.简要说明声明和定义一个函数的过程
+	先是把函数名加入FuncTable符号表
+	再调用Block->CodeGen(coder);就可以对函数主体做代码生成
+	其中coder作为一个贯穿全局的CodeDOT类，它的地位十分重要，就和dumpdot里的dumper一样。coder的计数器count决定了局部变量分配的存储空间号码，coder的计数器ifcount和whilecount分别记录了if和while的label的后缀。
+
+4.在我的文法里，Block可以如下拆解：
+Block       : '{'   '}'             
+            | '{' BlockItemH '}'  
+
+	而BlockItemH又可以经过BlockItem->Stmt->Block的路径重新回到Block，所以对于多Block的代码生成非常简单，只需要调用它自己名下的CodeGen()函数即可以一种DFS的方式完成。
+
+5.while结构代码生成示意如下:
+
+while.cond:
+	cond ....
+	br ... while.body,while.end
+while.body:
+	...
+	br while.cond
+while.end:
+	...
+
+	很自然地就可以形成先判断条件后执行循环的结构。
+
+6.对于多层嵌套的变量作用域，我的代码并不能做出有效的应对，这是遗憾之处。
+
+7.我以printf的格式做代码生成，所以很轻松地就完成了break和continue，这个具体实现无需多讲，只需访问coder->whilecount即可轻松实现。
+
+8.实验中遇到的困难：
+     	8.1	首要当然还是看不懂llvm的接口啦，不过转做printf让本已心如死灰的我重新焕发动力，希望张老师下一届考虑正		式提出使用printf做代码生成
+	8.2	全局变量还是局部变量？这是一个问题，我在观察了许久以后，使用Node类的scope属性来标记全局变量，并且生成代		码时给它@符号，例如load i32* @a,align 4
+	8.3	数组也是很大的困难，相比于llvm哪一套什么memset那些东西，我做的更统一、简洁，都是使用基址＋偏移的方式：
+		%1 = load i32* @0, align 4
+		%2 = sext i32 %1 to i64
+		%3 = getelementptr inbounds [10 x i32]* %a, i32 0, i64 %40
+
+9.建议
+	我的电脑装了3套clang工具，一套apple的，一套在lib库里的3.6.2，一套不在库里的可执行文件格式的3.6.2(我明明ninja装3.6.0的，不知道怎么出来后能用但是版本号不对)。在使用llvm工具时遇到了极大的困难。另一方面，我在使用printf做代码生成时，设身处地的感受了不同语句是如何生成中间代码的，尤其是if和while的label的嵌套这里，就像在做课本上的练习题一样。总的来说收获很多，希望张老师在下一届考虑printf代码生成。
+	
